@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24299" systemVersion="25B5042k" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="BuildEntity" representedClassName="BuildEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="bmvPIN" optional="YES" attributeType="String"/>
+        <attribute name="bmvSerialNumber" optional="YES" attributeType="String"/>
+        <attribute name="buildDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="builderInitials" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="mpptPIN" optional="YES" attributeType="String"/>
+        <attribute name="mpptSerialNumber" optional="YES" attributeType="String"/>
+        <attribute name="orionPIN" optional="YES" attributeType="String"/>
+        <attribute name="orionSerialNumber" optional="YES" attributeType="String"/>
+        <attribute name="testDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="testerInitials" optional="YES" attributeType="String"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+</model>
