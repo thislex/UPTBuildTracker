@@ -20,16 +20,22 @@ struct BuildDetailView: View {
             Section("BMV Serial Number") {
                 DetailRow(label: "Serial Number", value: build.bmvSerialNumber ?? "N/A")
                 DetailRow(label: "PIN", value: build.bmvPIN ?? "N/A")
+                DetailRow(label: "PUK", value: build.bmvPUK ?? "N/A")
             }
             
             Section("Orion Serial Number") {
                 DetailRow(label: "Serial Number", value: build.orionSerialNumber ?? "N/A")
                 DetailRow(label: "PIN", value: build.orionPIN ?? "N/A")
+                DetailRow(label: "Charge Rate", value: build.orionChargeRate ?? "N/A")
             }
             
             Section("MPPT Serial Number") {
                 DetailRow(label: "Serial Number", value: build.mpptSerialNumber ?? "N/A")
                 DetailRow(label: "PIN", value: build.mpptPIN ?? "N/A")
+            }
+            
+            Section("Shore Charger Serial Number") {
+                DetailRow(label: "Serial Number", value: build.shoreChargerSerialNumber ?? "N/A")
             }
             
             Section("Builder Information") {

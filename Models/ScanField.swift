@@ -9,5 +9,5 @@
 import Foundation
 
 enum ScanField {
-    case bmv, orion, mppt
+    case bmv, orion, mppt, shoreCharger
 }

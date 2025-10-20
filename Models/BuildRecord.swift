@@ -13,10 +13,13 @@ struct BuildRecord: Identifiable, Codable {
     var uniqueID: String
     var bmvSerialNumber: String
     var bmvPIN: String
+    var bmvPUK: String
     var orionSerialNumber: String
     var orionPIN: String
+    var orionChargeRate: String
     var mpptSerialNumber: String
     var mpptPIN: String
+    var shoreChargerSerialNumber: String
     var builderInitials: String
     var buildDate: Date
     var testerInitials: String

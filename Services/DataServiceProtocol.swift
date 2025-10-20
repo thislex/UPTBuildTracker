@@ -21,10 +21,13 @@ class DataService: DataServiceProtocol {
         entity.uniqueID = record.uniqueID
         entity.bmvSerialNumber = record.bmvSerialNumber
         entity.bmvPIN = record.bmvPIN
+        entity.bmvPUK = record.bmvPUK
         entity.orionSerialNumber = record.orionSerialNumber
         entity.orionPIN = record.orionPIN
+        entity.orionChargeRate = record.orionChargeRate
         entity.mpptSerialNumber = record.mpptSerialNumber
         entity.mpptPIN = record.mpptPIN
+        entity.shoreChargerSerialNumber = record.shoreChargerSerialNumber
         entity.builderInitials = record.builderInitials
         entity.buildDate = record.buildDate
         entity.testerInitials = record.testerInitials

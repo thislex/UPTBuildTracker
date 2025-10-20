@@ -6,6 +6,31 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7F1DF7062E961E2500C382E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F1DF7052E961E2500C382E6 /* Assets.xcassets */; };
+		7F1DF70B2E961E2500C382E6 /* UPTBuildTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7092E961E2500C382E6 /* UPTBuildTracker.xcdatamodeld */; };
+		7F1DF7362E9629AA00C382E6 /* UPTBuildTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7352E9629AA00C382E6 /* UPTBuildTrackerApp.swift */; };
+		7F1DF74F2E962BD400C382E6 /* BuildEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF74E2E962BD400C382E6 /* BuildEntity+CoreDataClass.swift */; };
+		7F1DF7522E962EE200C382E6 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7382E9629CC00C382E6 /* PersistenceController.swift */; };
+		7F1DF7542E962F8300C382E6 /* BuildEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7532E962F8300C382E6 /* BuildEntity+CoreDataProperties.swift */; };
+		7F1DF7552E9630A900C382E6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7402E962A9700C382E6 /* ContentView.swift */; };
+		7F1DF7572E9630F700C382E6 /* ArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7472E962B2200C382E6 /* ArchiveView.swift */; };
+		7F1DF7582E96310000C382E6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF74B2E962B5200C382E6 /* SettingsView.swift */; };
+		7F1DF7592E96313A00C382E6 /* BuildEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7422E962AD100C382E6 /* BuildEntryView.swift */; };
+		7F1DF75A2E9631A200C382E6 /* ArchiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF73E2E962A8500C382E6 /* ArchiveViewModel.swift */; };
+		7F1DF75B2E9631AD00C382E6 /* BuildEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF73D2E962A7700C382E6 /* BuildEntryViewModel.swift */; };
+		7F1DF75C2E96320300C382E6 /* ScanField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF73A2E962A5900C382E6 /* ScanField.swift */; };
+		7F1DF75D2E96324200C382E6 /* DataServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF73B2E962A6400C382E6 /* DataServiceProtocol.swift */; };
+		7F1DF75E2E96324F00C382E6 /* GoogleSheetsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF73C2E962A6C00C382E6 /* GoogleSheetsServiceProtocol.swift */; };
+		7F1DF75F2E9632B500C382E6 /* BuildRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7392E962A4B00C382E6 /* BuildRecord.swift */; };
+		7F1DF7602E96339C00C382E6 /* GoogleSheetsInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF74C2E962B5B00C382E6 /* GoogleSheetsInstructionsView.swift */; };
+		7F1DF7642E963A0D00C382E6 /* BuildDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7482E962B2D00C382E6 /* BuildDetailView.swift */; };
+		7F1DF7652E963A1900C382E6 /* DetailRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF74D2E962B6500C382E6 /* DetailRow.swift */; };
+		7FBE8EC42E989040002F2ECD /* BarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBE8EC32E989040002F2ECD /* BarcodeScannerView.swift */; };
+		7FBE8EC62E98907A002F2ECD /* CameraScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBE8EC52E98907A002F2ECD /* CameraScannerView.swift */; };
+		7FBE8ECA2E9F6B59002F2ECD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FBE8EC92E9F6B59002F2ECD /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		7F1DF7112E961E2500C382E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -25,16 +50,34 @@
 
 /* Begin PBXFileReference section */
 		7F1DF6FE2E961E2300C382E6 /* UPTBuildTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UPTBuildTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F1DF7052E961E2500C382E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7F1DF70A2E961E2500C382E6 /* UPTBuildTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UPTBuildTracker.xcdatamodel; sourceTree = "<group>"; };
 		7F1DF7102E961E2500C382E6 /* UPTBuildTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UPTBuildTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F1DF71A2E961E2500C382E6 /* UPTBuildTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UPTBuildTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F1DF72D2E96202F00C382E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7F1DF7352E9629AA00C382E6 /* UPTBuildTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UPTBuildTrackerApp.swift; sourceTree = "<group>"; };
+		7F1DF7382E9629CC00C382E6 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		7F1DF7392E962A4B00C382E6 /* BuildRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildRecord.swift; sourceTree = "<group>"; };
+		7F1DF73A2E962A5900C382E6 /* ScanField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanField.swift; sourceTree = "<group>"; };
+		7F1DF73B2E962A6400C382E6 /* DataServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataServiceProtocol.swift; sourceTree = "<group>"; };
+		7F1DF73C2E962A6C00C382E6 /* GoogleSheetsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSheetsServiceProtocol.swift; sourceTree = "<group>"; };
+		7F1DF73D2E962A7700C382E6 /* BuildEntryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildEntryViewModel.swift; sourceTree = "<group>"; };
+		7F1DF73E2E962A8500C382E6 /* ArchiveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveViewModel.swift; sourceTree = "<group>"; };
+		7F1DF7402E962A9700C382E6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7F1DF7422E962AD100C382E6 /* BuildEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildEntryView.swift; sourceTree = "<group>"; };
+		7F1DF7472E962B2200C382E6 /* ArchiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveView.swift; sourceTree = "<group>"; };
+		7F1DF7482E962B2D00C382E6 /* BuildDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildDetailView.swift; sourceTree = "<group>"; };
+		7F1DF74B2E962B5200C382E6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		7F1DF74C2E962B5B00C382E6 /* GoogleSheetsInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSheetsInstructionsView.swift; sourceTree = "<group>"; };
+		7F1DF74D2E962B6500C382E6 /* DetailRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRow.swift; sourceTree = "<group>"; };
+		7F1DF74E2E962BD400C382E6 /* BuildEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BuildEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7F1DF7532E962F8300C382E6 /* BuildEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BuildEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7FBE8EC32E989040002F2ECD /* BarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerView.swift; sourceTree = "<group>"; };
+		7FBE8EC52E98907A002F2ECD /* CameraScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraScannerView.swift; sourceTree = "<group>"; };
+		7FBE8EC92E9F6B59002F2ECD /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7F1DF7002E961E2300C382E6 /* UPTBuildTracker */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = UPTBuildTracker;
-			sourceTree = "<group>";
-		};
 		7F1DF7132E961E2500C382E6 /* UPTBuildTrackerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = UPTBuildTrackerTests;
@@ -75,7 +118,16 @@
 		7F1DF6F52E961E2300C382E6 = {
 			isa = PBXGroup;
 			children = (
-				7F1DF7002E961E2300C382E6 /* UPTBuildTracker */,
+				7FBE8EC92E9F6B59002F2ECD /* LaunchScreen.storyboard */,
+				7F1DF7352E9629AA00C382E6 /* UPTBuildTrackerApp.swift */,
+				7F1DF72F2E9628D300C382E6 /* Models */,
+				7F1DF7302E9628EB00C382E6 /* ViewModels */,
+				7F1DF7312E9628F500C382E6 /* Views */,
+				7F1DF7322E9628FA00C382E6 /* Services */,
+				7F1DF7332E96290400C382E6 /* CoreData */,
+				7F1DF7342E96290900C382E6 /* Resources */,
+				7F1DF72D2E96202F00C382E6 /* Info.plist */,
+				7F1DF7052E961E2500C382E6 /* Assets.xcassets */,
 				7F1DF7132E961E2500C382E6 /* UPTBuildTrackerTests */,
 				7F1DF71D2E961E2500C382E6 /* UPTBuildTrackerUITests */,
 				7F1DF6FF2E961E2300C382E6 /* Products */,
@@ -92,6 +144,107 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		7F1DF72F2E9628D300C382E6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7F1DF7392E962A4B00C382E6 /* BuildRecord.swift */,
+				7F1DF73A2E962A5900C382E6 /* ScanField.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7F1DF7302E9628EB00C382E6 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7F1DF73E2E962A8500C382E6 /* ArchiveViewModel.swift */,
+				7F1DF73D2E962A7700C382E6 /* BuildEntryViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		7F1DF7312E9628F500C382E6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7F1DF7432E962ADF00C382E6 /* Archive */,
+				7F1DF7412E962AC100C382E6 /* BuildEntry */,
+				7F1DF7462E962AF800C382E6 /* Components */,
+				7F1DF7442E962AE600C382E6 /* Scanner */,
+				7F1DF7452E962AED00C382E6 /* Settings */,
+				7F1DF7402E962A9700C382E6 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7F1DF7322E9628FA00C382E6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7F1DF73B2E962A6400C382E6 /* DataServiceProtocol.swift */,
+				7F1DF73C2E962A6C00C382E6 /* GoogleSheetsServiceProtocol.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		7F1DF7332E96290400C382E6 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				7F1DF7532E962F8300C382E6 /* BuildEntity+CoreDataProperties.swift */,
+				7F1DF74E2E962BD400C382E6 /* BuildEntity+CoreDataClass.swift */,
+				7F1DF7382E9629CC00C382E6 /* PersistenceController.swift */,
+				7F1DF7092E961E2500C382E6 /* UPTBuildTracker.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		7F1DF7342E96290900C382E6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		7F1DF7412E962AC100C382E6 /* BuildEntry */ = {
+			isa = PBXGroup;
+			children = (
+				7F1DF7422E962AD100C382E6 /* BuildEntryView.swift */,
+			);
+			path = BuildEntry;
+			sourceTree = "<group>";
+		};
+		7F1DF7432E962ADF00C382E6 /* Archive */ = {
+			isa = PBXGroup;
+			children = (
+				7F1DF7482E962B2D00C382E6 /* BuildDetailView.swift */,
+				7F1DF7472E962B2200C382E6 /* ArchiveView.swift */,
+			);
+			path = Archive;
+			sourceTree = "<group>";
+		};
+		7F1DF7442E962AE600C382E6 /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				7FBE8EC32E989040002F2ECD /* BarcodeScannerView.swift */,
+				7FBE8EC52E98907A002F2ECD /* CameraScannerView.swift */,
+			);
+			path = Scanner;
+			sourceTree = "<group>";
+		};
+		7F1DF7452E962AED00C382E6 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				7F1DF74C2E962B5B00C382E6 /* GoogleSheetsInstructionsView.swift */,
+				7F1DF74B2E962B5200C382E6 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		7F1DF7462E962AF800C382E6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				7F1DF74D2E962B6500C382E6 /* DetailRow.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -106,9 +259,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				7F1DF7002E961E2300C382E6 /* UPTBuildTracker */,
 			);
 			name = UPTBuildTracker;
 			packageProductDependencies = (
@@ -212,6 +362,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7FBE8ECA2E9F6B59002F2ECD /* LaunchScreen.storyboard in Resources */,
+				7F1DF7062E961E2500C382E6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +388,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7FBE8EC42E989040002F2ECD /* BarcodeScannerView.swift in Sources */,
+				7F1DF7572E9630F700C382E6 /* ArchiveView.swift in Sources */,
+				7F1DF75D2E96324200C382E6 /* DataServiceProtocol.swift in Sources */,
+				7F1DF7642E963A0D00C382E6 /* BuildDetailView.swift in Sources */,
+				7F1DF75F2E9632B500C382E6 /* BuildRecord.swift in Sources */,
+				7F1DF7542E962F8300C382E6 /* BuildEntity+CoreDataProperties.swift in Sources */,
+				7F1DF75B2E9631AD00C382E6 /* BuildEntryViewModel.swift in Sources */,
+				7F1DF7582E96310000C382E6 /* SettingsView.swift in Sources */,
+				7F1DF75A2E9631A200C382E6 /* ArchiveViewModel.swift in Sources */,
+				7F1DF7362E9629AA00C382E6 /* UPTBuildTrackerApp.swift in Sources */,
+				7F1DF7592E96313A00C382E6 /* BuildEntryView.swift in Sources */,
+				7F1DF7552E9630A900C382E6 /* ContentView.swift in Sources */,
+				7F1DF74F2E962BD400C382E6 /* BuildEntity+CoreDataClass.swift in Sources */,
+				7F1DF70B2E961E2500C382E6 /* UPTBuildTracker.xcdatamodeld in Sources */,
+				7FBE8EC62E98907A002F2ECD /* CameraScannerView.swift in Sources */,
+				7F1DF7522E962EE200C382E6 /* PersistenceController.swift in Sources */,
+				7F1DF7652E963A1900C382E6 /* DetailRow.swift in Sources */,
+				7F1DF75E2E96324F00C382E6 /* GoogleSheetsServiceProtocol.swift in Sources */,
+				7F1DF7602E96339C00C382E6 /* GoogleSheetsInstructionsView.swift in Sources */,
+				7F1DF75C2E96320300C382E6 /* ScanField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +572,7 @@
 				DEVELOPMENT_TEAM = EPMT7DEL43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera access to scan serial numbers";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,6 +605,7 @@
 				DEVELOPMENT_TEAM = EPMT7DEL43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera access to scan serial numbers";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -578,6 +752,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7F1DF7092E961E2500C382E6 /* UPTBuildTracker.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7F1DF70A2E961E2500C382E6 /* UPTBuildTracker.xcdatamodel */,
+			);
+			currentVersion = 7F1DF70A2E961E2500C382E6 /* UPTBuildTracker.xcdatamodel */;
+			path = UPTBuildTracker.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7F1DF6F62E961E2300C382E6 /* Project object */;
 }

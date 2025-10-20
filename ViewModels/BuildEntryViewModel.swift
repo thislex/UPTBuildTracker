@@ -14,19 +14,27 @@ class BuildEntryViewModel: ObservableObject {
     @Published var uniqueID = ""
     @Published var bmvSerialNumber = ""
     @Published var bmvPIN = ""
+    @Published var bmvPUK = ""
     @Published var orionSerialNumber = ""
     @Published var orionPIN = ""
+    @Published var orionChargeRate = "18A"
     @Published var mpptSerialNumber = ""
     @Published var mpptPIN = ""
+    @Published var shoreChargerSerialNumber = ""
     @Published var builderInitials = ""
     @Published var buildDate = Date()
     @Published var testerInitials = ""
     @Published var testDate = Date()
     
+    var bmvPINIsValid: Bool { bmvPIN.count == 6 }
+    var orionPINIsValid: Bool { orionPIN.count == 6 }
+    var mpptPINIsValid: Bool { mpptPIN.count == 6 }
+
     @Published var showingScanner = false
     @Published var scanningField: ScanField = .bmv
     @Published var showingAlert = false
     @Published var alertMessage = ""
+    @Published var showingClearConfirmation = false
     
     private let dataService: DataServiceProtocol
     private let sheetsService: GoogleSheetsServiceProtocol
@@ -38,7 +46,11 @@ class BuildEntryViewModel: ObservableObject {
     }
     
     var isFormValid: Bool {
-        !uniqueID.isEmpty && !bmvSerialNumber.isEmpty && !builderInitials.isEmpty && !testerInitials.isEmpty
+        !uniqueID.isEmpty &&
+        !bmvSerialNumber.isEmpty &&
+        !shoreChargerSerialNumber.isEmpty &&
+        !builderInitials.isEmpty &&
+        bmvPINIsValid && orionPINIsValid && mpptPINIsValid
     }
     
     func generateUniqueID() {
@@ -59,10 +71,13 @@ class BuildEntryViewModel: ObservableObject {
             uniqueID: uniqueID,
             bmvSerialNumber: bmvSerialNumber,
             bmvPIN: bmvPIN,
+            bmvPUK: bmvPUK,
             orionSerialNumber: orionSerialNumber,
             orionPIN: orionPIN,
+            orionChargeRate: orionChargeRate,
             mpptSerialNumber: mpptSerialNumber,
             mpptPIN: mpptPIN,
+            shoreChargerSerialNumber: shoreChargerSerialNumber,
             builderInitials: builderInitials,
             buildDate: buildDate,
             testerInitials: testerInitials,
@@ -84,24 +99,46 @@ class BuildEntryViewModel: ObservableObject {
         uniqueID = ""
         bmvSerialNumber = ""
         bmvPIN = ""
+        bmvPUK = ""
         orionSerialNumber = ""
         orionPIN = ""
+        orionChargeRate = "18A"
         mpptSerialNumber = ""
         mpptPIN = ""
+        shoreChargerSerialNumber = ""
         builderInitials = ""
         buildDate = Date()
         testerInitials = ""
         testDate = Date()
     }
     
+    func showClearConfirmation() {
+        showingClearConfirmation = true
+    }
+    
     func getBindingForScanField() -> Binding<String> {
         switch scanningField {
         case .bmv:
-            return $bmvSerialNumber
+            return Binding(
+                get: { self.bmvSerialNumber },
+                set: { self.bmvSerialNumber = $0 }
+            )
         case .orion:
-            return $orionSerialNumber
+            return Binding(
+                get: { self.orionSerialNumber },
+                set: { self.orionSerialNumber = $0 }
+            )
         case .mppt:
-            return $mpptSerialNumber
+            return Binding(
+                get: { self.mpptSerialNumber },
+                set: { self.mpptSerialNumber = $0 }
+            )
+        case .shoreCharger:
+            return Binding(
+                get: { self.shoreChargerSerialNumber },
+                set: { self.shoreChargerSerialNumber = $0 }
+            )
         }
     }
 }
+

@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import Combine
 
 class ArchiveViewModel: ObservableObject {
     @Published var searchText = ""
@@ -37,26 +38,30 @@ class ArchiveViewModel: ObservableObject {
     }
     
     func generateCSV(from builds: [BuildEntity]) -> String {
-        var csv = "Unique ID,BMV Serial Number,BMV PIN,Orion Serial Number,Orion PIN,MPPT Serial Number,MPPT PIN,Builder Initials,Build Date,Tester Initials,Test Date,Created At\n"
+        var csv = "Unique ID,BMV Serial Number,BMV PIN,BMV PUK,Orion Serial Number,Orion PIN,Orion Charge Rate,MPPT Serial Number,MPPT PIN,Shore Charger Serial Number,Builder Initials,Build Date,Tester Initials,Test Date,Created At\n"
         
         for build in builds {
-            let row = [
-                build.uniqueID ?? "",
-                build.bmvSerialNumber ?? "",
-                build.bmvPIN ?? "",
-                build.orionSerialNumber ?? "",
-                build.orionPIN ?? "",
-                build.mpptSerialNumber ?? "",
-                build.mpptPIN ?? "",
-                build.builderInitials ?? "",
-                build.buildDate?.formatted(date: .abbreviated, time: .omitted) ?? "",
-                build.testerInitials ?? "",
-                build.testDate?.formatted(date: .abbreviated, time: .omitted) ?? "",
-                build.createdAt?.formatted(date: .abbreviated, time: .standard) ?? ""
-            ].joined(separator: ",")
-            csv += row + "\n"
+            let uniqueID = build.uniqueID ?? ""
+            let bmvSN = build.bmvSerialNumber ?? ""
+            let bmvPIN = build.bmvPIN ?? ""
+            let bmvPUK = build.bmvPUK ?? ""
+            let orionSN = build.orionSerialNumber ?? ""
+            let orionPIN = build.orionPIN ?? ""
+            let orionChargeRate = build.orionChargeRate ?? ""
+            let mpptSN = build.mpptSerialNumber ?? ""
+            let mpptPIN = build.mpptPIN ?? ""
+            let shoreChargerSerialNumber = build.shoreChargerSerialNumber ?? ""
+            let builderInit = build.builderInitials ?? ""
+            let buildDateStr = build.buildDate?.formatted(date: .abbreviated, time: .omitted) ?? ""
+            let testerInit = build.testerInitials ?? ""
+            let testDateStr = build.testDate?.formatted(date: .abbreviated, time: .omitted) ?? ""
+            let createdStr = build.createdAt?.formatted(date: .abbreviated, time: .standard) ?? ""
+            
+            let row = "\(uniqueID),\(bmvSN),\(bmvPIN),\(bmvPUK),\(orionSN),\(orionPIN),\(orionChargeRate),\(mpptSN),\(mpptPIN),\(shoreChargerSerialNumber),\(builderInit),\(buildDateStr),\(testerInit),\(testDateStr),\(createdStr)\n"
+            csv += row
         }
         
         return csv
     }
 }
+
