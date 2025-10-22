@@ -29,6 +29,8 @@ class BuildEntryViewModel: ObservableObject {
     var bmvPINIsValid: Bool { bmvPIN.count == 6 }
     var orionPINIsValid: Bool { orionPIN.count == 6 }
     var mpptPINIsValid: Bool { mpptPIN.count == 6 }
+    
+
 
     @Published var showingScanner = false
     @Published var scanningField: ScanField = .bmv
@@ -67,7 +69,37 @@ class BuildEntryViewModel: ObservableObject {
     }
     
     func saveBuild(sheetsURL: String) {
-        let record = BuildRecord(
+        let record = buildRecord()
+        
+        // Save locally first (fast operation)
+        dataService.saveBuild(record)
+        
+        // Upload to sheets asynchronously if URL provided
+        if !sheetsURL.trimmingCharacters(in: .whitespaces).isEmpty {
+            Task {
+                do {
+                    try await sheetsService.uploadBuild(record, to: sheetsURL)
+                    await MainActor.run {
+                        alertMessage = "Build saved successfully!\nID: \(uniqueID)\n✅ Uploaded to Google Sheets"
+                        showingAlert = true
+                    }
+                } catch {
+                    await MainActor.run {
+                        alertMessage = "Build saved locally!\nID: \(uniqueID)\n⚠️ Upload failed: \(error.localizedDescription)"
+                        showingAlert = true
+                    }
+                }
+            }
+        } else {
+            alertMessage = "Build saved successfully!\nID: \(uniqueID)"
+            showingAlert = true
+        }
+        
+        clearForm()
+    }
+    
+    private func buildRecord() -> BuildRecord {
+        BuildRecord(
             uniqueID: uniqueID,
             bmvSerialNumber: bmvSerialNumber,
             bmvPIN: bmvPIN,
@@ -83,16 +115,6 @@ class BuildEntryViewModel: ObservableObject {
             testerInitials: testerInitials,
             testDate: testDate
         )
-        
-        dataService.saveBuild(record)
-        
-        if !sheetsURL.isEmpty {
-            sheetsService.uploadBuild(record, to: sheetsURL)
-        }
-        
-        alertMessage = "Build saved successfully!\nID: \(uniqueID)"
-        showingAlert = true
-        clearForm()
     }
     
     func clearForm() {

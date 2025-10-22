@@ -21,61 +21,27 @@ struct BuildEntryView: View {
                 }
                 
                 Section(header: Text("Victron BMV")) {
-                    HStack {
-                        TextField("Serial Number", text: $viewModel.bmvSerialNumber)
-                            .autocapitalization(.allCharacters)
-                        Button(action: { viewModel.scanSerial(for: .bmv) }) {
-                            Image(systemName: "camera.fill")
-                        }
-                    }
-                    TextField("PIN Code", text: $viewModel.bmvPIN)
-                        .keyboardType(.numberPad)
-                        .onChange(of: viewModel.bmvPIN) { oldValue, newValue in
-                            // Keep only numeric characters and limit to 6 digits
-                            let filtered = newValue.filter { $0.isNumber }
-                            if filtered.count > 6 {
-                                viewModel.bmvPIN = String(filtered.prefix(6))
-                            } else if filtered != newValue {
-                                viewModel.bmvPIN = filtered
-                            }
-                        }
-                        .overlay(alignment: .trailing) {
-                            if !viewModel.bmvPIN.isEmpty {
-                                Image(systemName: viewModel.bmvPIN.count == 6 ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
-                                    .foregroundStyle(viewModel.bmvPIN.count == 6 ? .green : .orange)
-                                    .padding(.trailing, 8)
-                            }
-                        }
+                    SerialNumberField(
+                        title: "Serial Number",
+                        serialNumber: $viewModel.bmvSerialNumber,
+                        onScanTapped: { viewModel.scanSerial(for: .bmv) }
+                    )
+                    
+                    PINTextField(title: "PIN Code", pin: $viewModel.bmvPIN)
+                    
                     TextField("PUK", text: $viewModel.bmvPUK)
                         .autocapitalization(.allCharacters)
                 }
                 
                 Section(header: Text("Victron Orion 12/12 50A")) {
-                    HStack {
-                        TextField("Serial Number", text: $viewModel.orionSerialNumber)
-                            .autocapitalization(.allCharacters)
-                        Button(action: { viewModel.scanSerial(for: .orion) }) {
-                            Image(systemName: "camera.fill")
-                        }
-                    }
-                    TextField("PIN Code", text: $viewModel.orionPIN)
-                        .keyboardType(.numberPad)
-                        .onChange(of: viewModel.orionPIN) { oldValue, newValue in
-                            // Keep only numeric characters and limit to 6 digits
-                            let filtered = newValue.filter { $0.isNumber }
-                            if filtered.count > 6 {
-                                viewModel.orionPIN = String(filtered.prefix(6))
-                            } else if filtered != newValue {
-                                viewModel.orionPIN = filtered
-                            }
-                        }
-                        .overlay(alignment: .trailing) {
-                            if !viewModel.orionPIN.isEmpty {
-                                Image(systemName: viewModel.orionPIN.count == 6 ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
-                                    .foregroundStyle(viewModel.orionPIN.count == 6 ? .green : .orange)
-                                    .padding(.trailing, 8)
-                            }
-                        }
+                    SerialNumberField(
+                        title: "Serial Number",
+                        serialNumber: $viewModel.orionSerialNumber,
+                        onScanTapped: { viewModel.scanSerial(for: .orion) }
+                    )
+                    
+                    PINTextField(title: "PIN Code", pin: $viewModel.orionPIN)
+                    
                     Picker("Charge Rate", selection: $viewModel.orionChargeRate) {
                         Text("18A").tag("18A")
                         Text("50A").tag("50A")
@@ -84,41 +50,21 @@ struct BuildEntryView: View {
                 }
                 
                 Section(header: Text("Victron MPPT 75/15")) {
-                    HStack {
-                        TextField("Serial Number", text: $viewModel.mpptSerialNumber)
-                            .autocapitalization(.allCharacters)
-                        Button(action: { viewModel.scanSerial(for: .mppt) }) {
-                            Image(systemName: "camera.fill")
-                        }
-                    }
-                    TextField("PIN Code", text: $viewModel.mpptPIN)
-                        .keyboardType(.numberPad)
-                        .onChange(of: viewModel.mpptPIN) { oldValue, newValue in
-                            // Keep only numeric characters and limit to 6 digits
-                            let filtered = newValue.filter { $0.isNumber }
-                            if filtered.count > 6 {
-                                viewModel.mpptPIN = String(filtered.prefix(6))
-                            } else if filtered != newValue {
-                                viewModel.mpptPIN = filtered
-                            }
-                        }
-                        .overlay(alignment: .trailing) {
-                            if !viewModel.mpptPIN.isEmpty {
-                                Image(systemName: viewModel.mpptPIN.count == 6 ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
-                                    .foregroundStyle(viewModel.mpptPIN.count == 6 ? .green : .orange)
-                                    .padding(.trailing, 8)
-                            }
-                        }
+                    SerialNumberField(
+                        title: "Serial Number",
+                        serialNumber: $viewModel.mpptSerialNumber,
+                        onScanTapped: { viewModel.scanSerial(for: .mppt) }
+                    )
+                    
+                    PINTextField(title: "PIN Code", pin: $viewModel.mpptPIN)
                 }
                 
                 Section(header: Text("Shore Charger")) {
-                    HStack {
-                        TextField("Serial Number", text: $viewModel.shoreChargerSerialNumber)
-                            .autocapitalization(.allCharacters)
-                        Button(action: { viewModel.scanSerial(for: .shoreCharger) }) {
-                            Image(systemName: "camera.fill")
-                        }
-                    }
+                    SerialNumberField(
+                        title: "Serial Number",
+                        serialNumber: $viewModel.shoreChargerSerialNumber,
+                        onScanTapped: { viewModel.scanSerial(for: .shoreCharger) }
+                    )
                 }
                 
                 Section(header: Text("Builder Information")) {

@@ -9,16 +9,16 @@
 import Foundation
 
 protocol GoogleSheetsServiceProtocol {
-    func uploadBuild(_ record: BuildRecord, to url: String)
+    func uploadBuild(_ record: BuildRecord, to url: String) async throws
 }
 
 class GoogleSheetsService: GoogleSheetsServiceProtocol {
-    func uploadBuild(_ record: BuildRecord, to urlString: String) {
+    func uploadBuild(_ record: BuildRecord, to urlString: String) async throws {
         print("🔵 Attempting to upload to: \(urlString)")
         
         guard let url = URL(string: urlString) else {
             print("❌ Invalid URL: \(urlString)")
-            return
+            throw URLError(.badURL)
         }
         
         var request = URLRequest(url: url)
@@ -44,22 +44,21 @@ class GoogleSheetsService: GoogleSheetsServiceProtocol {
         
         print("🔵 Data to send: \(data)")
         
-        request.httpBody = try? JSONSerialization.data(withJSONObject: data)
+        request.httpBody = try JSONSerialization.data(withJSONObject: data)
         
-        URLSession.shared.dataTask(with: request) { responseData, response, error in
-            if let error = error {
-                print("❌ Network error: \(error.localizedDescription)")
-                return
-            }
+        let (responseData, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse {
+            print("🔵 Response status code: \(httpResponse.statusCode)")
             
-            if let httpResponse = response as? HTTPURLResponse {
-                print("🔵 Response status code: \(httpResponse.statusCode)")
+            // Throw an error for non-success status codes
+            guard 200...299 ~= httpResponse.statusCode else {
+                throw URLError(.badServerResponse)
             }
-            
-            if let responseData = responseData,
-               let responseString = String(data: responseData, encoding: .utf8) {
-                print("🔵 Response: \(responseString)")
-            }
-        }.resume()
+        }
+        
+        if let responseString = String(data: responseData, encoding: .utf8) {
+            print("🔵 Response: \(responseString)")
+        }
     }
 }
