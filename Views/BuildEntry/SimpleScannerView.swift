@@ -1,32 +1,30 @@
 //
-//  BarcodeScannerView.swift
+//  SimpleScannerView.swift
 //  UPTBuildTracker
 //
 //  Created by Lexter Tapawan on 10/27/25.
 //
 
-
 import SwiftUI
 import AVFoundation
-import AudioToolbox
 
-struct BarcodeScannerView: UIViewControllerRepresentable {
+struct SimpleScannerView: UIViewControllerRepresentable {
     @Binding var scannedCode: String
     @Binding var isPresented: Bool
     
-    func makeUIViewController(context: Context) -> ScannerViewController {
-        let scanner = ScannerViewController()
+    func makeUIViewController(context: Context) -> SimpleScannerViewController {
+        let scanner = SimpleScannerViewController()
         scanner.delegate = context.coordinator
         return scanner
     }
     
-    func updateUIViewController(_ uiViewController: ScannerViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: SimpleScannerViewController, context: Context) {}
     
     func makeCoordinator() -> Coordinator {
         Coordinator(scannedCode: $scannedCode, isPresented: $isPresented)
     }
     
-    class Coordinator: NSObject, ScannerViewControllerDelegate {
+    class Coordinator: NSObject, SimpleScannerDelegate {
         @Binding var scannedCode: String
         @Binding var isPresented: Bool
         
@@ -35,7 +33,7 @@ struct BarcodeScannerView: UIViewControllerRepresentable {
             _isPresented = isPresented
         }
         
-        func didFind(code: String) {
+        func didScan(code: String) {
             scannedCode = code
             isPresented = false
         }
@@ -46,24 +44,30 @@ struct BarcodeScannerView: UIViewControllerRepresentable {
     }
 }
 
-protocol ScannerViewControllerDelegate: AnyObject {
-    func didFind(code: String)
+protocol SimpleScannerDelegate: AnyObject {
+    func didScan(code: String)
     func didCancel()
 }
 
-class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
+class SimpleScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
-    weak var delegate: ScannerViewControllerDelegate?
+    weak var delegate: SimpleScannerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .black
+        setupCamera()
+        setupUI()
+    }
+    
+    private func setupCamera() {
         captureSession = AVCaptureSession()
+        captureSession.sessionPreset = .medium
         
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else {
-            failed()
+            showError()
             return
         }
         
@@ -72,14 +76,14 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         do {
             videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
         } catch {
-            failed()
+            showError()
             return
         }
         
         if captureSession.canAddInput(videoInput) {
             captureSession.addInput(videoInput)
         } else {
-            failed()
+            showError()
             return
         }
         
@@ -87,19 +91,16 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         if captureSession.canAddOutput(metadataOutput) {
             captureSession.addOutput(metadataOutput)
-            
             metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             
-            // Support all common barcode types
+            // Support common barcode types
             metadataOutput.metadataObjectTypes = [
-                .ean8, .ean13, .pdf417,
-                .qr, .code39, .code39Mod43,
-                .code93, .code128, .upce,
-                .aztec, .dataMatrix, .interleaved2of5,
-                .itf14
+                .code128, .code39, .code93,
+                .ean13, .ean8, .upce,
+                .qr, .pdf417
             ]
         } else {
-            failed()
+            showError()
             return
         }
         
@@ -107,36 +108,31 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         previewLayer.frame = view.layer.bounds
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
+    }
+    
+    private func setupUI() {
+        // Green scanning rectangle
+        let scanningFrame = UIView(frame: CGRect(x: 0, y: 0, width: 280, height: 150))
+        scanningFrame.center = view.center
+        scanningFrame.layer.borderColor = UIColor.systemGreen.cgColor
+        scanningFrame.layer.borderWidth = 4
+        scanningFrame.layer.cornerRadius = 12
+        scanningFrame.backgroundColor = UIColor.clear
+        view.addSubview(scanningFrame)
         
-        // Add viewfinder overlay
-        let overlayView = UIView(frame: CGRect(x: 0, y: 0, width: 280, height: 150))
-        overlayView.center = view.center
-        overlayView.layer.borderColor = UIColor.systemGreen.cgColor
-        overlayView.layer.borderWidth = 3
-        overlayView.layer.cornerRadius = 12
-        overlayView.backgroundColor = UIColor.systemGreen.withAlphaComponent(0.1)
-        view.addSubview(overlayView)
+        // Simple instruction label
+        let instructionLabel = UILabel()
+        instructionLabel.text = "Point camera at barcode"
+        instructionLabel.textAlignment = .center
+        instructionLabel.textColor = .white
+        instructionLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        instructionLabel.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        instructionLabel.layer.cornerRadius = 8
+        instructionLabel.clipsToBounds = true
+        instructionLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(instructionLabel)
         
-        // Add instruction label
-        let label = UILabel()
-        label.text = "Align barcode within frame"
-        label.textAlignment = .center
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 16, weight: .semibold)
-        label.backgroundColor = UIColor.black.withAlphaComponent(0.7)
-        label.layer.cornerRadius = 8
-        label.clipsToBounds = true
-        label.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.topAnchor.constraint(equalTo: overlayView.bottomAnchor, constant: 20),
-            label.widthAnchor.constraint(equalToConstant: 280),
-            label.heightAnchor.constraint(equalToConstant: 44)
-        ])
-        
-        // Add cancel button (top left)
+        // Cancel button
         let cancelButton = UIButton(type: .system)
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.setTitleColor(.white, for: .normal)
@@ -148,30 +144,28 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         view.addSubview(cancelButton)
         
         NSLayoutConstraint.activate([
+            // Instruction label below the scanning frame
+            instructionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            instructionLabel.topAnchor.constraint(equalTo: scanningFrame.bottomAnchor, constant: 20),
+            instructionLabel.widthAnchor.constraint(equalToConstant: 280),
+            instructionLabel.heightAnchor.constraint(equalToConstant: 44),
+            
+            // Cancel button in top left
             cancelButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cancelButton.widthAnchor.constraint(equalToConstant: 80),
             cancelButton.heightAnchor.constraint(equalToConstant: 44)
         ])
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.captureSession.startRunning()
-        }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        previewLayer?.frame = view.layer.bounds
-    }
-    
-    @objc func cancelTapped() {
+    @objc private func cancelTapped() {
         delegate?.didCancel()
     }
     
-    func failed() {
+    private func showError() {
         let alert = UIAlertController(
-            title: "Scanning Not Supported",
-            message: "Your device does not support barcode scanning.",
+            title: "Camera Error",
+            message: "Unable to access camera for barcode scanning.",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
@@ -198,23 +192,30 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         }
     }
     
-    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
-        captureSession.stopRunning()
-        
-        if let metadataObject = metadataObjects.first {
-            guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
-            guard let stringValue = readableObject.stringValue else { return }
-            
-            // Haptic feedback
-            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-            
-            found(code: stringValue)
-        }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer?.frame = view.layer.bounds
     }
     
-    func found(code: String) {
-        print("✅ Barcode detected: \(code)")
-        delegate?.didFind(code: code)
+    // MARK: - AVCaptureMetadataOutputObjectsDelegate
+    
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        // Find the first valid barcode
+        guard let metadataObject = metadataObjects.first,
+              let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject,
+              let stringValue = readableObject.stringValue else {
+            return
+        }
+        
+        // Stop scanning immediately
+        captureSession.stopRunning()
+        
+        // Provide haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
+        
+        // Return the scanned code
+        delegate?.didScan(code: stringValue)
     }
     
     override var prefersStatusBarHidden: Bool {

@@ -29,9 +29,11 @@
 		7F39C1B12EA6A10800EAFA9F /* PINTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F39C1B02EA6A10800EAFA9F /* PINTextField.swift */; };
 		7F39C1B32EA6A10E00EAFA9F /* SerialNumberField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F39C1B22EA6A10E00EAFA9F /* SerialNumberField.swift */; };
 		7F39C1B52EA6A14E00EAFA9F /* PerformanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F39C1B42EA6A14E00EAFA9F /* PerformanceConfig.swift */; };
-		7FBE8EC42E989040002F2ECD /* BarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBE8EC32E989040002F2ECD /* BarcodeScannerView.swift */; };
 		7FBE8EC62E98907A002F2ECD /* CameraScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBE8EC52E98907A002F2ECD /* CameraScannerView.swift */; };
 		7FBE8ECA2E9F6B59002F2ECD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FBE8EC92E9F6B59002F2ECD /* LaunchScreen.storyboard */; };
+		7FE4866F2EB083A5003539AE /* SimpleScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE4866E2EB083A5003539AE /* SimpleScannerView.swift */; };
+		7FE486732EB08AC2003539AE /* BarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE486722EB08AC2003539AE /* BarcodeScannerView.swift */; };
+		7FE486752EB31244003539AE /* SimpleBarcodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE486742EB31244003539AE /* SimpleBarcodeScanner.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,9 +80,11 @@
 		7F39C1B02EA6A10800EAFA9F /* PINTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINTextField.swift; sourceTree = "<group>"; };
 		7F39C1B22EA6A10E00EAFA9F /* SerialNumberField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialNumberField.swift; sourceTree = "<group>"; };
 		7F39C1B42EA6A14E00EAFA9F /* PerformanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceConfig.swift; sourceTree = "<group>"; };
-		7FBE8EC32E989040002F2ECD /* BarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerView.swift; sourceTree = "<group>"; };
 		7FBE8EC52E98907A002F2ECD /* CameraScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraScannerView.swift; sourceTree = "<group>"; };
 		7FBE8EC92E9F6B59002F2ECD /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		7FE4866E2EB083A5003539AE /* SimpleScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleScannerView.swift; sourceTree = "<group>"; };
+		7FE486722EB08AC2003539AE /* BarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerView.swift; sourceTree = "<group>"; };
+		7FE486742EB31244003539AE /* SimpleBarcodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleBarcodeScanner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -215,6 +219,7 @@
 				7F39C1B02EA6A10800EAFA9F /* PINTextField.swift */,
 				7F39C1B22EA6A10E00EAFA9F /* SerialNumberField.swift */,
 				7F39C1B42EA6A14E00EAFA9F /* PerformanceConfig.swift */,
+				7FE4866E2EB083A5003539AE /* SimpleScannerView.swift */,
 			);
 			path = BuildEntry;
 			sourceTree = "<group>";
@@ -231,7 +236,8 @@
 		7F1DF7442E962AE600C382E6 /* Scanner */ = {
 			isa = PBXGroup;
 			children = (
-				7FBE8EC32E989040002F2ECD /* BarcodeScannerView.swift */,
+				7FE486742EB31244003539AE /* SimpleBarcodeScanner.swift */,
+				7FE486722EB08AC2003539AE /* BarcodeScannerView.swift */,
 				7FBE8EC52E98907A002F2ECD /* CameraScannerView.swift */,
 			);
 			path = Scanner;
@@ -397,7 +403,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FBE8EC42E989040002F2ECD /* BarcodeScannerView.swift in Sources */,
 				7F1DF7572E9630F700C382E6 /* ArchiveView.swift in Sources */,
 				7F1DF75D2E96324200C382E6 /* DataServiceProtocol.swift in Sources */,
 				7F1DF7642E963A0D00C382E6 /* BuildDetailView.swift in Sources */,
@@ -406,11 +411,14 @@
 				7F1DF7542E962F8300C382E6 /* BuildEntity+CoreDataProperties.swift in Sources */,
 				7F1DF75B2E9631AD00C382E6 /* BuildEntryViewModel.swift in Sources */,
 				7F1DF7582E96310000C382E6 /* SettingsView.swift in Sources */,
+				7FE4866F2EB083A5003539AE /* SimpleScannerView.swift in Sources */,
+				7FE486732EB08AC2003539AE /* BarcodeScannerView.swift in Sources */,
 				7F1DF75A2E9631A200C382E6 /* ArchiveViewModel.swift in Sources */,
 				7F1DF7362E9629AA00C382E6 /* UPTBuildTrackerApp.swift in Sources */,
 				7F1DF7592E96313A00C382E6 /* BuildEntryView.swift in Sources */,
 				7F1DF7552E9630A900C382E6 /* ContentView.swift in Sources */,
 				7F1DF74F2E962BD400C382E6 /* BuildEntity+CoreDataClass.swift in Sources */,
+				7FE486752EB31244003539AE /* SimpleBarcodeScanner.swift in Sources */,
 				7F1DF70B2E961E2500C382E6 /* UPTBuildTracker.xcdatamodeld in Sources */,
 				7FBE8EC62E98907A002F2ECD /* CameraScannerView.swift in Sources */,
 				7F1DF7522E962EE200C382E6 /* PersistenceController.swift in Sources */,

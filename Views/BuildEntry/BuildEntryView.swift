@@ -12,20 +12,19 @@ struct BuildEntryView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel = BuildEntryViewModel()
     @AppStorage("googleSheetsURL") private var sheetsURL = ""
+    @State private var showShoreChargerScanner = false
     
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("Product Information")) {
                     TextField("UPT ID", text: $viewModel.uniqueID)
+                        .keyboardType(.numberPad)
                 }
                 
                 Section(header: Text("Victron BMV")) {
-                    SerialNumberField(
-                        title: "Serial Number",
-                        serialNumber: $viewModel.bmvSerialNumber,
-                        onScanTapped: { viewModel.scanSerial(for: .bmv) }
-                    )
+                    TextField("Serial Number", text: $viewModel.bmvSerialNumber)
+                        .autocapitalization(.allCharacters)
                     
                     PINTextField(title: "PIN Code", pin: $viewModel.bmvPIN)
                     
@@ -34,11 +33,8 @@ struct BuildEntryView: View {
                 }
                 
                 Section(header: Text("Victron Orion 12/12 50A")) {
-                    SerialNumberField(
-                        title: "Serial Number",
-                        serialNumber: $viewModel.orionSerialNumber,
-                        onScanTapped: { viewModel.scanSerial(for: .orion) }
-                    )
+                    TextField("Serial Number", text: $viewModel.orionSerialNumber)
+                        .autocapitalization(.allCharacters)
                     
                     PINTextField(title: "PIN Code", pin: $viewModel.orionPIN)
                     
@@ -50,11 +46,8 @@ struct BuildEntryView: View {
                 }
                 
                 Section(header: Text("Victron MPPT 75/15")) {
-                    SerialNumberField(
-                        title: "Serial Number",
-                        serialNumber: $viewModel.mpptSerialNumber,
-                        onScanTapped: { viewModel.scanSerial(for: .mppt) }
-                    )
+                    TextField("Serial Number", text: $viewModel.mpptSerialNumber)
+                        .autocapitalization(.allCharacters)
                     
                     PINTextField(title: "PIN Code", pin: $viewModel.mpptPIN)
                 }
@@ -63,7 +56,7 @@ struct BuildEntryView: View {
                     SerialNumberField(
                         title: "Serial Number",
                         serialNumber: $viewModel.shoreChargerSerialNumber,
-                        onScanTapped: { viewModel.scanSerial(for: .shoreCharger) }
+                        onScanTapped: { showShoreChargerScanner = true }
                     )
                 }
                 
@@ -79,6 +72,7 @@ struct BuildEntryView: View {
                             Label("Save Build", systemImage: "checkmark.circle.fill")
                                 .frame(maxWidth: .infinity, minHeight: 44)
                                 .fontWeight(.semibold)
+                                .foregroundStyle(Color(UIColor.label))
                         }
                         .buttonStyle(.borderedProminent)
                         .disabled(!viewModel.isFormValid)
@@ -91,6 +85,7 @@ struct BuildEntryView: View {
                         .foregroundStyle(.red)
                     }
                 }
+
                 
                 VStack(spacing: 4) {
                     Text("Made by Lexter S. Tapawan")
@@ -107,11 +102,8 @@ struct BuildEntryView: View {
                 .listRowSeparator(.hidden)
             }
             .navigationTitle("New Build Entry")
-            .sheet(isPresented: $viewModel.showingScanner) {
-                CameraScannerView(
-                    scannedText: viewModel.getBindingForScanField(),
-                    isPresented: $viewModel.showingScanner
-                )
+            .sheet(isPresented: $showShoreChargerScanner) {
+                SimpleBarcodeScanner(scannedCode: $viewModel.shoreChargerSerialNumber)
             }
             .alert("Build Entry", isPresented: $viewModel.showingAlert) {
                 Button("OK", role: .cancel) { }
