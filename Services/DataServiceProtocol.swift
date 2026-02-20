@@ -9,12 +9,13 @@
 import CoreData
 
 protocol DataServiceProtocol {
-    func saveBuild(_ record: BuildRecord)
+    func saveBuild(_ record: BuildRecord, syncStatus: String)
     func deleteBuild(_ build: BuildEntity, context: NSManagedObjectContext)
+    func updateSyncStatus(_ build: BuildEntity, status: String, error: String?)
 }
 
 class DataService: DataServiceProtocol {
-    func saveBuild(_ record: BuildRecord) {
+    func saveBuild(_ record: BuildRecord, syncStatus: String = "pending") {
         let context = PersistenceController.shared.container.viewContext
         let entity = BuildEntity(context: context)
         entity.id = record.id
@@ -34,11 +35,26 @@ class DataService: DataServiceProtocol {
         entity.testDate = record.testDate
         entity.createdAt = record.createdAt
         
+        // Set sync status
+        entity.syncStatus = syncStatus
+        entity.lastSyncAttempt = nil
+        entity.syncError = nil
+        
         try? context.save()
     }
     
     func deleteBuild(_ build: BuildEntity, context: NSManagedObjectContext) {
         context.delete(build)
         try? context.save()
+    }
+    
+    func updateSyncStatus(_ build: BuildEntity, status: String, error: String?) {
+        build.syncStatus = status
+        build.lastSyncAttempt = Date()
+        build.syncError = error
+        
+        if let context = build.managedObjectContext {
+            try? context.save()
+        }
     }
 }

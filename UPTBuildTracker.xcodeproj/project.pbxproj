@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F17F27E2ED6287E00EB82F4 /* SYNC_RETRY_IMPLEMENTATION.md in Resources */ = {isa = PBXBuildFile; fileRef = 7F17F27D2ED6287E00EB82F4 /* SYNC_RETRY_IMPLEMENTATION.md */; };
+		7F17F2802ED6289B00EB82F4 /* CORE_DATA_UPDATE_INSTRUCTIONS.md in Resources */ = {isa = PBXBuildFile; fileRef = 7F17F27F2ED6289B00EB82F4 /* CORE_DATA_UPDATE_INSTRUCTIONS.md */; };
 		7F1DF7062E961E2500C382E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F1DF7052E961E2500C382E6 /* Assets.xcassets */; };
 		7F1DF70B2E961E2500C382E6 /* UPTBuildTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7092E961E2500C382E6 /* UPTBuildTracker.xcdatamodeld */; };
 		7F1DF7362E9629AA00C382E6 /* UPTBuildTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DF7352E9629AA00C382E6 /* UPTBuildTrackerApp.swift */; };
@@ -54,6 +56,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7F17F27D2ED6287E00EB82F4 /* SYNC_RETRY_IMPLEMENTATION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SYNC_RETRY_IMPLEMENTATION.md; sourceTree = "<group>"; };
+		7F17F27F2ED6289B00EB82F4 /* CORE_DATA_UPDATE_INSTRUCTIONS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CORE_DATA_UPDATE_INSTRUCTIONS.md; sourceTree = "<group>"; };
 		7F1DF6FE2E961E2300C382E6 /* UPTBuildTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UPTBuildTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F1DF7052E961E2500C382E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7F1DF70A2E961E2500C382E6 /* UPTBuildTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UPTBuildTracker.xcdatamodel; sourceTree = "<group>"; };
@@ -220,6 +224,8 @@
 				7F39C1B22EA6A10E00EAFA9F /* SerialNumberField.swift */,
 				7F39C1B42EA6A14E00EAFA9F /* PerformanceConfig.swift */,
 				7FE4866E2EB083A5003539AE /* SimpleScannerView.swift */,
+				7F17F27D2ED6287E00EB82F4 /* SYNC_RETRY_IMPLEMENTATION.md */,
+				7F17F27F2ED6289B00EB82F4 /* CORE_DATA_UPDATE_INSTRUCTIONS.md */,
 			);
 			path = BuildEntry;
 			sourceTree = "<group>";
@@ -377,7 +383,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F17F27E2ED6287E00EB82F4 /* SYNC_RETRY_IMPLEMENTATION.md in Resources */,
 				7FBE8ECA2E9F6B59002F2ECD /* LaunchScreen.storyboard in Resources */,
+				7F17F2802ED6289B00EB82F4 /* CORE_DATA_UPDATE_INSTRUCTIONS.md in Resources */,
 				7F1DF7062E961E2500C382E6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

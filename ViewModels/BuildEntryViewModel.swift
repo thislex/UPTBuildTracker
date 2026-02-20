@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import CoreData
 
 class BuildEntryViewModel: ObservableObject {
     @Published var uniqueID = ""
@@ -71,31 +72,50 @@ class BuildEntryViewModel: ObservableObject {
     func saveBuild(sheetsURL: String) {
         let record = buildRecord()
         
-        // Save locally first (fast operation)
-        dataService.saveBuild(record)
-        
         // Upload to sheets asynchronously if URL provided
         if !sheetsURL.trimmingCharacters(in: .whitespaces).isEmpty {
+            // Save with "pending" status initially
+            dataService.saveBuild(record, syncStatus: "pending")
+            
             Task {
                 do {
                     try await sheetsService.uploadBuild(record, to: sheetsURL)
                     await MainActor.run {
+                        // Update to "synced" status
+                        if let entity = fetchBuildEntity(by: record.id) {
+                            dataService.updateSyncStatus(entity, status: "synced", error: nil)
+                        }
                         alertMessage = "Build saved successfully!\nID: \(uniqueID)\n✅ Uploaded to Google Sheets"
                         showingAlert = true
                     }
                 } catch {
                     await MainActor.run {
-                        alertMessage = "Build saved locally!\nID: \(uniqueID)\n⚠️ Upload failed: \(error.localizedDescription)"
+                        // Update to "failed" status with error
+                        if let entity = fetchBuildEntity(by: record.id) {
+                            dataService.updateSyncStatus(entity, status: "failed", error: error.localizedDescription)
+                        }
+                        alertMessage = "Build saved locally!\nID: \(uniqueID)\n⚠️ Upload failed: \(error.localizedDescription)\n\nYou can retry from the Archive."
                         showingAlert = true
                     }
                 }
             }
         } else {
+            // No sheets URL, save as "synced" (no upload needed)
+            dataService.saveBuild(record, syncStatus: "synced")
             alertMessage = "Build saved successfully!\nID: \(uniqueID)"
             showingAlert = true
         }
         
         clearForm()
+    }
+    
+    // Helper to fetch BuildEntity by UUID
+    private func fetchBuildEntity(by id: UUID) -> BuildEntity? {
+        let context = PersistenceController.shared.container.viewContext
+        let request = BuildEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
     }
     
     private func buildRecord() -> BuildRecord {

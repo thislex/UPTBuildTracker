@@ -30,4 +30,9 @@ extension BuildEntity {
     @NSManaged public var testerInitials: String?
     @NSManaged public var testDate: Date?
     @NSManaged public var createdAt: Date?
+    
+    // Sync status tracking
+    @NSManaged public var syncStatus: String? // "synced", "pending", "failed"
+    @NSManaged public var lastSyncAttempt: Date?
+    @NSManaged public var syncError: String?
 }

@@ -12,7 +12,16 @@ struct BuildEntryView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel = BuildEntryViewModel()
     @AppStorage("googleSheetsURL") private var sheetsURL = ""
+    @State private var showBMVScanner = false
+    @State private var showOrionScanner = false
+    @State private var showMPPTScanner = false
     @State private var showShoreChargerScanner = false
+    
+    @FocusState private var focusedField: SerialField?
+    
+    enum SerialField {
+        case bmv, orion, mppt, shoreCharger
+    }
     
     var body: some View {
         NavigationView {
@@ -23,8 +32,13 @@ struct BuildEntryView: View {
                 }
                 
                 Section(header: Text("Victron BMV")) {
-                    TextField("Serial Number", text: $viewModel.bmvSerialNumber)
-                        .autocapitalization(.allCharacters)
+                    SerialNumberField(
+                        title: "Serial Number",
+                        serialNumber: $viewModel.bmvSerialNumber,
+                        onScanTapped: { showBMVScanner = true },
+                        focused: $focusedField,
+                        focusValue: .bmv
+                    )
                     
                     PINTextField(title: "PIN Code", pin: $viewModel.bmvPIN)
                     
@@ -33,8 +47,13 @@ struct BuildEntryView: View {
                 }
                 
                 Section(header: Text("Victron Orion 12/12 50A")) {
-                    TextField("Serial Number", text: $viewModel.orionSerialNumber)
-                        .autocapitalization(.allCharacters)
+                    SerialNumberField(
+                        title: "Serial Number",
+                        serialNumber: $viewModel.orionSerialNumber,
+                        onScanTapped: { showOrionScanner = true },
+                        focused: $focusedField,
+                        focusValue: .orion
+                    )
                     
                     PINTextField(title: "PIN Code", pin: $viewModel.orionPIN)
                     
@@ -46,8 +65,13 @@ struct BuildEntryView: View {
                 }
                 
                 Section(header: Text("Victron MPPT 75/15")) {
-                    TextField("Serial Number", text: $viewModel.mpptSerialNumber)
-                        .autocapitalization(.allCharacters)
+                    SerialNumberField(
+                        title: "Serial Number",
+                        serialNumber: $viewModel.mpptSerialNumber,
+                        onScanTapped: { showMPPTScanner = true },
+                        focused: $focusedField,
+                        focusValue: .mppt
+                    )
                     
                     PINTextField(title: "PIN Code", pin: $viewModel.mpptPIN)
                 }
@@ -56,7 +80,9 @@ struct BuildEntryView: View {
                     SerialNumberField(
                         title: "Serial Number",
                         serialNumber: $viewModel.shoreChargerSerialNumber,
-                        onScanTapped: { showShoreChargerScanner = true }
+                        onScanTapped: { showShoreChargerScanner = true },
+                        focused: $focusedField,
+                        focusValue: .shoreCharger
                     )
                 }
                 
@@ -102,6 +128,15 @@ struct BuildEntryView: View {
                 .listRowSeparator(.hidden)
             }
             .navigationTitle("New Build Entry")
+            .sheet(isPresented: $showBMVScanner) {
+                SimpleBarcodeScanner(scannedCode: $viewModel.bmvSerialNumber)
+            }
+            .sheet(isPresented: $showOrionScanner) {
+                SimpleBarcodeScanner(scannedCode: $viewModel.orionSerialNumber)
+            }
+            .sheet(isPresented: $showMPPTScanner) {
+                SimpleBarcodeScanner(scannedCode: $viewModel.mpptSerialNumber)
+            }
             .sheet(isPresented: $showShoreChargerScanner) {
                 SimpleBarcodeScanner(scannedCode: $viewModel.shoreChargerSerialNumber)
             }
@@ -119,6 +154,86 @@ struct BuildEntryView: View {
                 Text("Are you sure you want to clear all form data? This action cannot be undone.")
             }
         }
+    }
+}
+
+// MARK: - Number Row Accessory
+struct NumberRowAccessory: View {
+    let onDone: () -> Void
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 6) {
+                ForEach(["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"], id: \.self) { number in
+                    Button(number) {
+                        // Insert the number at cursor position
+                        guard let keyWindow = UIApplication.shared.connectedScenes
+                            .compactMap({ $0 as? UIWindowScene })
+                            .flatMap({ $0.windows })
+                            .first(where: { $0.isKeyWindow }),
+                              let textField = keyWindow.firstResponder as? UITextField else {
+                            return
+                        }
+                        textField.insertText(number)
+                    }
+                    .buttonStyle(.bordered)
+                    .buttonBorderShape(.roundedRectangle(radius: 8))
+                }
+                
+                Spacer()
+                
+                Button {
+                    onDone()
+                } label: {
+                    Text("Done")
+                        .fontWeight(.semibold)
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.roundedRectangle(radius: 8))
+            }
+            .padding(.horizontal, 8)
+        }
+        .frame(height: 44)
+        .background(.bar)
+    }
+}
+
+// Helper extension to find first responder
+extension UIResponder {
+    static var firstResponder: UIResponder? {
+        var responder: UIResponder?
+        let block: (Any?, UnsafeMutablePointer<ObjCBool>) -> Void = { obj, stop in
+            if let obj = obj as? UIResponder, obj.isFirstResponder {
+                responder = obj
+                stop.pointee = true
+            }
+        }
+        UIApplication.shared.sendAction(#selector(UIResponder.findFirstResponder(_:_:)), to: nil, from: (block as Any, UnsafeMutablePointer<ObjCBool>.allocate(capacity: 1)), for: nil)
+        return responder
+    }
+    
+    @objc private func findFirstResponder(_ sender: Any, _ stop: UnsafeMutablePointer<ObjCBool>) {
+        if self.isFirstResponder {
+            (sender as? (Any?, UnsafeMutablePointer<ObjCBool>) -> Void)?(self, stop)
+        }
+    }
+}
+
+extension UIWindow {
+    var firstResponder: UIResponder? {
+        findFirstResponder(in: self)
+    }
+    
+    private func findFirstResponder(in view: UIView) -> UIResponder? {
+        if view.isFirstResponder {
+            return view
+        }
+        for subview in view.subviews {
+            if let responder = findFirstResponder(in: subview) {
+                return responder
+            }
+        }
+        return nil
     }
 }
 

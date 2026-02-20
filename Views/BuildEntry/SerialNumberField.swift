@@ -7,15 +7,25 @@
 
 import SwiftUI
 
-struct SerialNumberField: View {
+struct SerialNumberField<T: Hashable>: View {
     let title: String
     @Binding var serialNumber: String
     let onScanTapped: () -> Void
+    var focused: FocusState<T?>.Binding? = nil
+    var focusValue: T? = nil
     
     var body: some View {
         HStack {
-            TextField(title, text: $serialNumber)
-                .autocapitalization(.allCharacters)
+            Group {
+                if let focused = focused, let focusValue = focusValue {
+                    TextField(title, text: $serialNumber)
+                        .focused(focused, equals: focusValue)
+                } else {
+                    TextField(title, text: $serialNumber)
+                }
+            }
+            .autocapitalization(.allCharacters)
+            
             Button(action: onScanTapped) {
                 Image(systemName: "camera.fill")
             }
@@ -25,7 +35,7 @@ struct SerialNumberField: View {
 
 #Preview {
     @Previewable @State var serial = ""
-    return SerialNumberField(
+    SerialNumberField<Int>(
         title: "Serial Number",
         serialNumber: $serial,
         onScanTapped: { }
