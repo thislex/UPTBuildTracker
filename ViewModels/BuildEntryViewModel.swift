@@ -72,41 +72,45 @@ class BuildEntryViewModel: ObservableObject {
     func saveBuild(sheetsURL: String) {
         let record = buildRecord()
         
-        // Upload to sheets asynchronously if URL provided
-        if !sheetsURL.trimmingCharacters(in: .whitespaces).isEmpty {
-            // Save with "pending" status initially
-            dataService.saveBuild(record, syncStatus: "pending")
-            
-            Task {
-                do {
-                    try await sheetsService.uploadBuild(record, to: sheetsURL)
-                    await MainActor.run {
+        Task { @MainActor in
+            do {
+                // Upload to sheets asynchronously if URL provided
+                if !sheetsURL.trimmingCharacters(in: .whitespaces).isEmpty {
+                    // Save with "pending" status initially
+                    try await dataService.saveBuild(record, syncStatus: "pending")
+                    
+                    do {
+                        try await sheetsService.uploadBuild(record, to: sheetsURL)
+                        
                         // Update to "synced" status
                         if let entity = fetchBuildEntity(by: record.id) {
-                            dataService.updateSyncStatus(entity, status: "synced", error: nil)
+                            try await dataService.updateSyncStatus(entity, status: "synced", error: nil)
                         }
                         alertMessage = "Build saved successfully!\nID: \(uniqueID)\n✅ Uploaded to Google Sheets"
                         showingAlert = true
-                    }
-                } catch {
-                    await MainActor.run {
+                    } catch {
                         // Update to "failed" status with error
                         if let entity = fetchBuildEntity(by: record.id) {
-                            dataService.updateSyncStatus(entity, status: "failed", error: error.localizedDescription)
+                            try? await dataService.updateSyncStatus(entity, status: "failed", error: error.localizedDescription)
                         }
                         alertMessage = "Build saved locally!\nID: \(uniqueID)\n⚠️ Upload failed: \(error.localizedDescription)\n\nYou can retry from the Archive."
                         showingAlert = true
                     }
+                } else {
+                    // No sheets URL, save as "synced" (no upload needed)
+                    try await dataService.saveBuild(record, syncStatus: "synced")
+                    alertMessage = "Build saved successfully!\nID: \(uniqueID)"
+                    showingAlert = true
                 }
+                
+                clearForm()
+            } catch {
+                // Handle save error
+                print("❌ Failed to save build: \(error.localizedDescription)")
+                alertMessage = "Failed to save build: \(error.localizedDescription)"
+                showingAlert = true
             }
-        } else {
-            // No sheets URL, save as "synced" (no upload needed)
-            dataService.saveBuild(record, syncStatus: "synced")
-            alertMessage = "Build saved successfully!\nID: \(uniqueID)"
-            showingAlert = true
         }
-        
-        clearForm()
     }
     
     // Helper to fetch BuildEntity by UUID

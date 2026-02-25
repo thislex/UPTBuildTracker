@@ -17,10 +17,15 @@ struct BuildEntryView: View {
     @State private var showMPPTScanner = false
     @State private var showShoreChargerScanner = false
     
-    @FocusState private var focusedField: SerialField?
+    @FocusState private var focusedField: FormField?
     
-    enum SerialField {
-        case bmv, orion, mppt, shoreCharger
+    enum FormField: Hashable {
+        case uniqueID
+        case bmvSerial, bmvPUK
+        case orionSerial
+        case mpptSerial
+        case shoreChargerSerial
+        case builderInitials
     }
     
     var body: some View {
@@ -29,6 +34,7 @@ struct BuildEntryView: View {
                 Section(header: Text("Product Information")) {
                     TextField("UPT ID", text: $viewModel.uniqueID)
                         .keyboardType(.numberPad)
+                        .focused($focusedField, equals: .uniqueID)
                 }
                 
                 Section(header: Text("Victron BMV")) {
@@ -37,13 +43,14 @@ struct BuildEntryView: View {
                         serialNumber: $viewModel.bmvSerialNumber,
                         onScanTapped: { showBMVScanner = true },
                         focused: $focusedField,
-                        focusValue: .bmv
+                        focusValue: .bmvSerial
                     )
                     
                     PINTextField(title: "PIN Code", pin: $viewModel.bmvPIN)
                     
                     TextField("PUK", text: $viewModel.bmvPUK)
                         .autocapitalization(.allCharacters)
+                        .focused($focusedField, equals: .bmvPUK)
                 }
                 
                 Section(header: Text("Victron Orion 12/12 50A")) {
@@ -52,7 +59,7 @@ struct BuildEntryView: View {
                         serialNumber: $viewModel.orionSerialNumber,
                         onScanTapped: { showOrionScanner = true },
                         focused: $focusedField,
-                        focusValue: .orion
+                        focusValue: .orionSerial
                     )
                     
                     PINTextField(title: "PIN Code", pin: $viewModel.orionPIN)
@@ -70,7 +77,7 @@ struct BuildEntryView: View {
                         serialNumber: $viewModel.mpptSerialNumber,
                         onScanTapped: { showMPPTScanner = true },
                         focused: $focusedField,
-                        focusValue: .mppt
+                        focusValue: .mpptSerial
                     )
                     
                     PINTextField(title: "PIN Code", pin: $viewModel.mpptPIN)
@@ -82,13 +89,14 @@ struct BuildEntryView: View {
                         serialNumber: $viewModel.shoreChargerSerialNumber,
                         onScanTapped: { showShoreChargerScanner = true },
                         focused: $focusedField,
-                        focusValue: .shoreCharger
+                        focusValue: .shoreChargerSerial
                     )
                 }
                 
                 Section(header: Text("Builder Information")) {
                     TextField("Builder Initials", text: $viewModel.builderInitials)
                         .autocapitalization(.allCharacters)
+                        .focused($focusedField, equals: .builderInitials)
                     DatePicker("Build Date", selection: $viewModel.buildDate, displayedComponents: .date)
                 }
                 
@@ -128,6 +136,18 @@ struct BuildEntryView: View {
                 .listRowSeparator(.hidden)
             }
             .navigationTitle("New Build Entry")
+            .scrollDismissesKeyboard(.interactively) // Dismiss keyboard on scroll
+            // MARK: - Keyboard Toolbar
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        focusedField = nil // Dismisses keyboard
+                    }
+                    .fontWeight(.semibold)
+                }
+            }
+            // MARK: - Scanner Sheets
             .sheet(isPresented: $showBMVScanner) {
                 SimpleBarcodeScanner(scannedCode: $viewModel.bmvSerialNumber)
             }

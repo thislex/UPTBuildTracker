@@ -128,6 +128,11 @@ struct ArchiveView: View {
             } message: {
                 Text(viewModel.syncAlertMessage)
             }
+            .alert("Delete Error", isPresented: $viewModel.showingDeleteError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(viewModel.deleteErrorMessage)
+            }
         }
     }
     
