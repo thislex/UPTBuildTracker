@@ -45,6 +45,18 @@ class PersistenceController {
         print("✅ Core Data loaded successfully")
     }
     
+    /// Save the view context if it has unsaved changes
+    func saveIfNeeded() {
+        let context = container.viewContext
+        guard context.hasChanges else { return }
+        do {
+            try context.save()
+            print("✅ Context saved on lifecycle event")
+        } catch {
+            print("❌ Failed to save context on lifecycle event: \(error.localizedDescription)")
+        }
+    }
+    
     /// Create a background context for performing operations off the main thread
     func newBackgroundContext() -> NSManagedObjectContext {
         let context = container.newBackgroundContext()

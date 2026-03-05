@@ -97,9 +97,9 @@ class BuildEntryViewModel: ObservableObject {
                         showingAlert = true
                     }
                 } else {
-                    // No sheets URL, save as "synced" (no upload needed)
-                    try await dataService.saveBuild(record, syncStatus: "synced")
-                    alertMessage = "Build saved successfully!\nID: \(uniqueID)"
+                    // No sheets URL, save as "pending" so it can be retried later
+                    try await dataService.saveBuild(record, syncStatus: "pending")
+                    alertMessage = "Build saved locally!\nID: \(uniqueID)\n⚠️ No Google Sheets URL configured. You can retry sync from the Archive."
                     showingAlert = true
                 }
                 
