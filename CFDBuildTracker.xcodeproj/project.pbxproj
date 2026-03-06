@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01C5DF6A6851445A95365C6A /* CBMiniBuildEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878C86D3CB4C4EC0AF0F27A9 /* CBMiniBuildEntryView.swift */; };
+		3A06F14D4EE44386B87192C2 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B3DE5F0E67B440694BD8FF5 /* SplashView.swift */; };
 		7F17F27E2ED6287E00EB82F4 /* SYNC_RETRY_IMPLEMENTATION.md in Resources */ = {isa = PBXBuildFile; fileRef = 7F17F27D2ED6287E00EB82F4 /* SYNC_RETRY_IMPLEMENTATION.md */; };
 		7F17F2802ED6289B00EB82F4 /* CORE_DATA_UPDATE_INSTRUCTIONS.md in Resources */ = {isa = PBXBuildFile; fileRef = 7F17F27F2ED6289B00EB82F4 /* CORE_DATA_UPDATE_INSTRUCTIONS.md */; };
 		7F1DF7062E961E2500C382E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F1DF7052E961E2500C382E6 /* Assets.xcassets */; };
@@ -36,10 +38,8 @@
 		7FE4866F2EB083A5003539AE /* SimpleScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE4866E2EB083A5003539AE /* SimpleScannerView.swift */; };
 		7FE486732EB08AC2003539AE /* BarcodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE486722EB08AC2003539AE /* BarcodeScannerView.swift */; };
 		7FE486752EB31244003539AE /* SimpleBarcodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE486742EB31244003539AE /* SimpleBarcodeScanner.swift */; };
-		3A06F14D4EE44386B87192C2 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B3DE5F0E67B440694BD8FF5 /* SplashView.swift */; };
 		ADF39949EC8F401EB2E52CF5 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6D9B748A6FB4ED48C9E5EB3 /* LandingView.swift */; };
 		C546E47DFFD94D36BFFD3BC8 /* CBMiniContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7328D40BBC14490CBCA7E447 /* CBMiniContentView.swift */; };
-		01C5DF6A6851445A95365C6A /* CBMiniBuildEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878C86D3CB4C4EC0AF0F27A9 /* CBMiniBuildEntryView.swift */; };
 		D3FB2C06B230434AB27B0DC6 /* CBMiniArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A960E5CCBCA4818926FFEF1 /* CBMiniArchiveView.swift */; };
 /* End PBXBuildFile section */
 
@@ -61,13 +61,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A960E5CCBCA4818926FFEF1 /* CBMiniArchiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBMiniArchiveView.swift; sourceTree = "<group>"; };
+		2B3DE5F0E67B440694BD8FF5 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		7328D40BBC14490CBCA7E447 /* CBMiniContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBMiniContentView.swift; sourceTree = "<group>"; };
 		7F17F27D2ED6287E00EB82F4 /* SYNC_RETRY_IMPLEMENTATION.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SYNC_RETRY_IMPLEMENTATION.md; sourceTree = "<group>"; };
 		7F17F27F2ED6289B00EB82F4 /* CORE_DATA_UPDATE_INSTRUCTIONS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CORE_DATA_UPDATE_INSTRUCTIONS.md; sourceTree = "<group>"; };
-		7F1DF6FE2E961E2300C382E6 /* UPTBuildTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UPTBuildTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F1DF6FE2E961E2300C382E6 /* CFDBuildTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CFDBuildTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F1DF7052E961E2500C382E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7F1DF70A2E961E2500C382E6 /* UPTBuildTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UPTBuildTracker.xcdatamodel; sourceTree = "<group>"; };
-		7F1DF7102E961E2500C382E6 /* UPTBuildTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UPTBuildTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7F1DF71A2E961E2500C382E6 /* UPTBuildTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UPTBuildTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F1DF7102E961E2500C382E6 /* CFDBuildTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CFDBuildTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F1DF71A2E961E2500C382E6 /* CFDBuildTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CFDBuildTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F1DF72D2E96202F00C382E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7F1DF7352E9629AA00C382E6 /* UPTBuildTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UPTBuildTrackerApp.swift; sourceTree = "<group>"; };
 		7F1DF7382E9629CC00C382E6 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
@@ -94,11 +97,8 @@
 		7FE4866E2EB083A5003539AE /* SimpleScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleScannerView.swift; sourceTree = "<group>"; };
 		7FE486722EB08AC2003539AE /* BarcodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerView.swift; sourceTree = "<group>"; };
 		7FE486742EB31244003539AE /* SimpleBarcodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleBarcodeScanner.swift; sourceTree = "<group>"; };
-		2B3DE5F0E67B440694BD8FF5 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
-		A6D9B748A6FB4ED48C9E5EB3 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
-		7328D40BBC14490CBCA7E447 /* CBMiniContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBMiniContentView.swift; sourceTree = "<group>"; };
 		878C86D3CB4C4EC0AF0F27A9 /* CBMiniBuildEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBMiniBuildEntryView.swift; sourceTree = "<group>"; };
-		2A960E5CCBCA4818926FFEF1 /* CBMiniArchiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBMiniArchiveView.swift; sourceTree = "<group>"; };
+		A6D9B748A6FB4ED48C9E5EB3 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -161,9 +161,9 @@
 		7F1DF6FF2E961E2300C382E6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7F1DF6FE2E961E2300C382E6 /* UPTBuildTracker.app */,
-				7F1DF7102E961E2500C382E6 /* UPTBuildTrackerTests.xctest */,
-				7F1DF71A2E961E2500C382E6 /* UPTBuildTrackerUITests.xctest */,
+				7F1DF6FE2E961E2300C382E6 /* CFDBuildTracker.app */,
+				7F1DF7102E961E2500C382E6 /* CFDBuildTrackerTests.xctest */,
+				7F1DF71A2E961E2500C382E6 /* CFDBuildTrackerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -200,16 +200,6 @@
 				A6D9B748A6FB4ED48C9E5EB3 /* LandingView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		EAC8688CDAE14230B2D4E807 /* CrookedBoxMini */ = {
-			isa = PBXGroup;
-			children = (
-				7328D40BBC14490CBCA7E447 /* CBMiniContentView.swift */,
-				878C86D3CB4C4EC0AF0F27A9 /* CBMiniBuildEntryView.swift */,
-				2A960E5CCBCA4818926FFEF1 /* CBMiniArchiveView.swift */,
-			);
-			path = CrookedBoxMini;
 			sourceTree = "<group>";
 		};
 		7F1DF7322E9628FA00C382E6 /* Services */ = {
@@ -289,12 +279,22 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		EAC8688CDAE14230B2D4E807 /* CrookedBoxMini */ = {
+			isa = PBXGroup;
+			children = (
+				7328D40BBC14490CBCA7E447 /* CBMiniContentView.swift */,
+				878C86D3CB4C4EC0AF0F27A9 /* CBMiniBuildEntryView.swift */,
+				2A960E5CCBCA4818926FFEF1 /* CBMiniArchiveView.swift */,
+			);
+			path = CrookedBoxMini;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7F1DF6FD2E961E2300C382E6 /* UPTBuildTracker */ = {
+		7F1DF6FD2E961E2300C382E6 /* CFDBuildTracker */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7F1DF7242E961E2500C382E6 /* Build configuration list for PBXNativeTarget "UPTBuildTracker" */;
+			buildConfigurationList = 7F1DF7242E961E2500C382E6 /* Build configuration list for PBXNativeTarget "CFDBuildTracker" */;
 			buildPhases = (
 				7F1DF6FA2E961E2300C382E6 /* Sources */,
 				7F1DF6FB2E961E2300C382E6 /* Frameworks */,
@@ -304,16 +304,16 @@
 			);
 			dependencies = (
 			);
-			name = UPTBuildTracker;
+			name = CFDBuildTracker;
 			packageProductDependencies = (
 			);
 			productName = UPTBuildTracker;
-			productReference = 7F1DF6FE2E961E2300C382E6 /* UPTBuildTracker.app */;
+			productReference = 7F1DF6FE2E961E2300C382E6 /* CFDBuildTracker.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7F1DF70F2E961E2500C382E6 /* UPTBuildTrackerTests */ = {
+		7F1DF70F2E961E2500C382E6 /* CFDBuildTrackerTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7F1DF7272E961E2500C382E6 /* Build configuration list for PBXNativeTarget "UPTBuildTrackerTests" */;
+			buildConfigurationList = 7F1DF7272E961E2500C382E6 /* Build configuration list for PBXNativeTarget "CFDBuildTrackerTests" */;
 			buildPhases = (
 				7F1DF70C2E961E2500C382E6 /* Sources */,
 				7F1DF70D2E961E2500C382E6 /* Frameworks */,
@@ -327,16 +327,16 @@
 			fileSystemSynchronizedGroups = (
 				7F1DF7132E961E2500C382E6 /* UPTBuildTrackerTests */,
 			);
-			name = UPTBuildTrackerTests;
+			name = CFDBuildTrackerTests;
 			packageProductDependencies = (
 			);
 			productName = UPTBuildTrackerTests;
-			productReference = 7F1DF7102E961E2500C382E6 /* UPTBuildTrackerTests.xctest */;
+			productReference = 7F1DF7102E961E2500C382E6 /* CFDBuildTrackerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7F1DF7192E961E2500C382E6 /* UPTBuildTrackerUITests */ = {
+		7F1DF7192E961E2500C382E6 /* CFDBuildTrackerUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7F1DF72A2E961E2500C382E6 /* Build configuration list for PBXNativeTarget "UPTBuildTrackerUITests" */;
+			buildConfigurationList = 7F1DF72A2E961E2500C382E6 /* Build configuration list for PBXNativeTarget "CFDBuildTrackerUITests" */;
 			buildPhases = (
 				7F1DF7162E961E2500C382E6 /* Sources */,
 				7F1DF7172E961E2500C382E6 /* Frameworks */,
@@ -350,11 +350,11 @@
 			fileSystemSynchronizedGroups = (
 				7F1DF71D2E961E2500C382E6 /* UPTBuildTrackerUITests */,
 			);
-			name = UPTBuildTrackerUITests;
+			name = CFDBuildTrackerUITests;
 			packageProductDependencies = (
 			);
 			productName = UPTBuildTrackerUITests;
-			productReference = 7F1DF71A2E961E2500C382E6 /* UPTBuildTrackerUITests.xctest */;
+			productReference = 7F1DF71A2E961E2500C382E6 /* CFDBuildTrackerUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -380,7 +380,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7F1DF6F92E961E2300C382E6 /* Build configuration list for PBXProject "UPTBuildTracker" */;
+			buildConfigurationList = 7F1DF6F92E961E2300C382E6 /* Build configuration list for PBXProject "CFDBuildTracker" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -394,9 +394,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7F1DF6FD2E961E2300C382E6 /* UPTBuildTracker */,
-				7F1DF70F2E961E2500C382E6 /* UPTBuildTrackerTests */,
-				7F1DF7192E961E2500C382E6 /* UPTBuildTrackerUITests */,
+				7F1DF6FD2E961E2300C382E6 /* CFDBuildTracker */,
+				7F1DF70F2E961E2500C382E6 /* CFDBuildTrackerTests */,
+				7F1DF7192E961E2500C382E6 /* CFDBuildTrackerUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -486,12 +486,12 @@
 /* Begin PBXTargetDependency section */
 		7F1DF7122E961E2500C382E6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7F1DF6FD2E961E2300C382E6 /* UPTBuildTracker */;
+			target = 7F1DF6FD2E961E2300C382E6 /* CFDBuildTracker */;
 			targetProxy = 7F1DF7112E961E2500C382E6 /* PBXContainerItemProxy */;
 		};
 		7F1DF71C2E961E2500C382E6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7F1DF6FD2E961E2300C382E6 /* UPTBuildTracker */;
+			target = 7F1DF6FD2E961E2300C382E6 /* CFDBuildTracker */;
 			targetProxy = 7F1DF71B2E961E2500C382E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -704,7 +704,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UPTBuildTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UPTBuildTracker";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CFDBuildTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CFDBuildTracker";
 			};
 			name = Debug;
 		};
@@ -726,7 +726,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UPTBuildTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UPTBuildTracker";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CFDBuildTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CFDBuildTracker";
 			};
 			name = Release;
 		};
@@ -773,7 +773,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7F1DF6F92E961E2300C382E6 /* Build configuration list for PBXProject "UPTBuildTracker" */ = {
+		7F1DF6F92E961E2300C382E6 /* Build configuration list for PBXProject "CFDBuildTracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7F1DF7222E961E2500C382E6 /* Debug */,
@@ -782,7 +782,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7F1DF7242E961E2500C382E6 /* Build configuration list for PBXNativeTarget "UPTBuildTracker" */ = {
+		7F1DF7242E961E2500C382E6 /* Build configuration list for PBXNativeTarget "CFDBuildTracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7F1DF7252E961E2500C382E6 /* Debug */,
@@ -791,7 +791,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7F1DF7272E961E2500C382E6 /* Build configuration list for PBXNativeTarget "UPTBuildTrackerTests" */ = {
+		7F1DF7272E961E2500C382E6 /* Build configuration list for PBXNativeTarget "CFDBuildTrackerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7F1DF7282E961E2500C382E6 /* Debug */,
@@ -800,7 +800,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7F1DF72A2E961E2500C382E6 /* Build configuration list for PBXNativeTarget "UPTBuildTrackerUITests" */ = {
+		7F1DF72A2E961E2500C382E6 /* Build configuration list for PBXNativeTarget "CFDBuildTrackerUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7F1DF72B2E961E2500C382E6 /* Debug */,
