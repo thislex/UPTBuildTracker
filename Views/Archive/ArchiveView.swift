@@ -16,6 +16,7 @@ struct ArchiveView: View {
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \BuildEntity.createdAt, ascending: false)],
+        predicate: NSPredicate(format: "syncStatus != %@", "synced"),
         animation: .default)
     private var builds: FetchedResults<BuildEntity>
 
@@ -51,10 +52,6 @@ struct ArchiveView: View {
                                     } else if build.syncStatus == "failed" {
                                         Image(systemName: "exclamationmark.icloud")
                                             .foregroundColor(.red)
-                                            .font(.caption)
-                                    } else if build.syncStatus == "synced" {
-                                        Image(systemName: "checkmark.icloud")
-                                            .foregroundColor(.green)
                                             .font(.caption)
                                     }
                                 }
@@ -99,8 +96,23 @@ struct ArchiveView: View {
                     showingDeleteConfirmation = true
                 }
             }
+            .overlay {
+                if filteredBuilds.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "checkmark.icloud.fill")
+                            .font(.system(size: 52))
+                            .foregroundStyle(.green)
+                        Text("All Synced")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                        Text("No pending or failed builds.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
             .environment(\.editMode, $editMode)
-            .navigationTitle("Build Archive")
+            .navigationTitle("Pending")
             .searchable(text: $viewModel.searchText, prompt: "Search builds...")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

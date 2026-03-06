@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct BuildEntryView: View {
+    var onGoHome: (() -> Void)? = nil
+
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel = BuildEntryViewModel()
     @AppStorage("googleSheetsURL") private var sheetsURL = ""
@@ -122,11 +124,11 @@ struct BuildEntryView: View {
 
                 
                 VStack(spacing: 4) {
-                    Text("Made by Lexter S. Tapawan")
+                    Text("Built by Lexter S. Tapawan")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                     
-                    Text("UPT Build Tracker™ 2025")
+                    Text("CFD Build Tracker™ 2026")
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                 }
@@ -137,8 +139,17 @@ struct BuildEntryView: View {
             }
             .navigationTitle("New Build Entry")
             .scrollDismissesKeyboard(.interactively) // Dismiss keyboard on scroll
-            // MARK: - Keyboard Toolbar
+            // MARK: - Navigation + Keyboard Toolbar
             .toolbar {
+                if let goHome = onGoHome {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            goHome()
+                        } label: {
+                            Label("Home", systemImage: "house.fill")
+                        }
+                    }
+                }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("Done") {
