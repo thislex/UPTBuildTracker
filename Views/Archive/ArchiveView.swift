@@ -18,6 +18,11 @@ struct ArchiveView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \BuildEntity.createdAt, ascending: false)],
         animation: .default)
     private var builds: FetchedResults<BuildEntity>
+
+    @State private var selection = Set<NSManagedObjectID>()
+    @State private var editMode: EditMode = .inactive
+    @State private var buildsToDelete: [BuildEntity] = []
+    @State private var showingDeleteConfirmation = false
     
     var filteredBuilds: [BuildEntity] {
         viewModel.filterBuilds(Array(builds))
@@ -29,15 +34,15 @@ struct ArchiveView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach(filteredBuilds, id: \.id) { build in
+            List(selection: $selection) {
+                ForEach(filteredBuilds, id: \.objectID) { build in
                     HStack {
                         NavigationLink(destination: BuildDetailView(build: build)) {
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack {
                                     Text(build.uniqueID ?? "Unknown")
                                         .font(.headline)
-                                    
+
                                     // Show sync status indicator
                                     if build.syncStatus == "pending" {
                                         Image(systemName: "clock.arrow.circlepath")
@@ -59,7 +64,7 @@ struct ArchiveView: View {
                                 Text("Builder: \(build.builderInitials ?? "N/A") • \(build.buildDate?.formatted(date: .abbreviated, time: .omitted) ?? "N/A")")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
-                                
+
                                 // Show sync error if exists
                                 if let error = build.syncError, build.syncStatus == "failed" {
                                     Text("Error: \(error)")
@@ -70,9 +75,9 @@ struct ArchiveView: View {
                             }
                             .padding(.vertical, 4)
                         }
-                        
-                        // Retry button for failed or pending syncs
-                        if build.syncStatus == "pending" || build.syncStatus == "failed" {
+
+                        // Retry button for failed or pending syncs (hidden in edit mode)
+                        if editMode == .inactive && (build.syncStatus == "pending" || build.syncStatus == "failed") {
                             Button {
                                 viewModel.retrySyncBuild(build, sheetsURL: sheetsURL)
                             } label: {
@@ -90,9 +95,11 @@ struct ArchiveView: View {
                     }
                 }
                 .onDelete { offsets in
-                    viewModel.deleteBuilds(at: offsets, from: filteredBuilds, context: viewContext)
+                    buildsToDelete = offsets.map { filteredBuilds[$0] }
+                    showingDeleteConfirmation = true
                 }
             }
+            .environment(\.editMode, $editMode)
             .navigationTitle("Build Archive")
             .searchable(text: $viewModel.searchText, prompt: "Search builds...")
             .toolbar {
@@ -118,8 +125,36 @@ struct ArchiveView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { exportToCSV() }) {
-                        Label("Export", systemImage: "square.and.arrow.up")
+                    if editMode == .active {
+                        Button("Done") {
+                            editMode = .inactive
+                            selection.removeAll()
+                        }
+                    } else {
+                        Menu {
+                            Button(action: { exportToCSV() }) {
+                                Label("Export CSV", systemImage: "square.and.arrow.up")
+                            }
+                            Button {
+                                editMode = .active
+                            } label: {
+                                Label("Select Records", systemImage: "checkmark.circle")
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                        }
+                    }
+                }
+
+                if editMode == .active && !selection.isEmpty {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button(role: .destructive) {
+                            buildsToDelete = filteredBuilds.filter { selection.contains($0.objectID) }
+                            showingDeleteConfirmation = true
+                        } label: {
+                            Label("Delete (\(selection.count))", systemImage: "trash")
+                                .foregroundStyle(.red)
+                        }
                     }
                 }
             }
@@ -127,6 +162,23 @@ struct ArchiveView: View {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text(viewModel.syncAlertMessage)
+            }
+            .alert("Delete Record\(buildsToDelete.count > 1 ? "s" : "")", isPresented: $showingDeleteConfirmation) {
+                Button("Delete", role: .destructive) {
+                    viewModel.deleteBuilds(buildsToDelete, context: viewContext)
+                    selection.removeAll()
+                    buildsToDelete = []
+                    if editMode == .active { editMode = .inactive }
+                }
+                Button("Cancel", role: .cancel) {
+                    buildsToDelete = []
+                }
+            } message: {
+                if buildsToDelete.count > 1 {
+                    Text("Are you sure you want to delete \(buildsToDelete.count) records? This action cannot be undone.")
+                } else {
+                    Text("Are you sure you want to delete this record? This action cannot be undone.")
+                }
             }
             .alert("Delete Error", isPresented: $viewModel.showingDeleteError) {
                 Button("OK", role: .cancel) { }

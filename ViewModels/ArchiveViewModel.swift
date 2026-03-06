@@ -42,29 +42,20 @@ class ArchiveViewModel: ObservableObject {
         }
     }
     
-    func deleteBuilds(at offsets: IndexSet, from builds: [BuildEntity], context: NSManagedObjectContext) {
-        // Ensure we're on the main thread
+    func deleteBuilds(_ buildsToDelete: [BuildEntity], context: NSManagedObjectContext) {
         guard Thread.isMainThread else {
-            DispatchQueue.main.async {
-                self.deleteBuilds(at: offsets, from: builds, context: context)
-            }
+            DispatchQueue.main.async { self.deleteBuilds(buildsToDelete, context: context) }
             return
         }
-        
-        // Collect the builds to delete first to avoid index issues
-        let buildsToDelete = offsets.map { builds[$0] }
-        
-        // Delete each build
+
         for build in buildsToDelete {
-            // Verify the build still exists in the context
             guard !build.isDeleted, build.managedObjectContext != nil else {
                 print("⚠️ Skipping already deleted or detached build")
                 continue
             }
             context.delete(build)
         }
-        
-        // Save the context
+
         do {
             if context.hasChanges {
                 try context.save()
@@ -72,16 +63,14 @@ class ArchiveViewModel: ObservableObject {
             }
         } catch {
             print("❌ Failed to delete builds: \(error.localizedDescription)")
-            let nsError = error as NSError
-            print("Error details: \(nsError.userInfo)")
-            
-            // Rollback to prevent inconsistent state
             context.rollback()
-            
-            // Show error to user
             self.deleteErrorMessage = "Failed to delete: \(error.localizedDescription)"
             self.showingDeleteError = true
         }
+    }
+
+    func deleteBuilds(at offsets: IndexSet, from builds: [BuildEntity], context: NSManagedObjectContext) {
+        deleteBuilds(offsets.map { builds[$0] }, context: context)
     }
     
     func generateCSV(from builds: [BuildEntity]) -> String {
