@@ -38,6 +38,9 @@ class BuildEntryViewModel: ObservableObject {
     @Published var showingAlert = false
     @Published var alertMessage = ""
     @Published var showingClearConfirmation = false
+    @Published var isSaving = false
+    @Published var saveProgress: Double = 0
+    @Published var saveStatusMessage = ""
     
     private let dataService: DataServiceProtocol
     private let sheetsService: GoogleSheetsServiceProtocol
@@ -71,45 +74,57 @@ class BuildEntryViewModel: ObservableObject {
     
     func saveBuild(sheetsURL: String) {
         let record = buildRecord()
-        
+
         Task { @MainActor in
+            isSaving = true
+            saveProgress = 0.1
+            saveStatusMessage = "Saving build..."
+
             do {
-                // Upload to sheets asynchronously if URL provided
                 if !sheetsURL.trimmingCharacters(in: .whitespaces).isEmpty {
-                    // Save with "pending" status initially
                     try await dataService.saveBuild(record, syncStatus: "pending")
-                    
+                    saveProgress = 0.4
+                    saveStatusMessage = "Saved locally. Uploading to Google Sheets..."
+
                     do {
                         try await sheetsService.uploadBuild(record, to: sheetsURL)
-                        
-                        // Update to "synced" status
+                        saveProgress = 0.85
+                        saveStatusMessage = "Finalizing..."
+
                         if let entity = fetchBuildEntity(by: record.id) {
                             try await dataService.updateSyncStatus(entity, status: "synced", error: nil)
                         }
+                        saveProgress = 1.0
+                        saveStatusMessage = "Done!"
                         alertMessage = "Build saved successfully!\nID: \(uniqueID)\n✅ Uploaded to Google Sheets"
-                        showingAlert = true
                     } catch {
-                        // Update to "failed" status with error
                         if let entity = fetchBuildEntity(by: record.id) {
                             try? await dataService.updateSyncStatus(entity, status: "failed", error: error.localizedDescription)
                         }
+                        saveProgress = 1.0
+                        saveStatusMessage = "Saved locally (upload failed)"
                         alertMessage = "Build saved locally!\nID: \(uniqueID)\n⚠️ Upload failed: \(error.localizedDescription)\n\nYou can retry from the Archive."
-                        showingAlert = true
                     }
                 } else {
-                    // No sheets URL, save as "pending" so it can be retried later
                     try await dataService.saveBuild(record, syncStatus: "pending")
+                    saveProgress = 1.0
+                    saveStatusMessage = "Saved locally!"
                     alertMessage = "Build saved locally!\nID: \(uniqueID)\n⚠️ No Google Sheets URL configured. You can retry sync from the Archive."
-                    showingAlert = true
                 }
-                
+
                 clearForm()
             } catch {
-                // Handle save error
+                saveProgress = 1.0
+                saveStatusMessage = "Save failed"
                 print("❌ Failed to save build: \(error.localizedDescription)")
                 alertMessage = "Failed to save build: \(error.localizedDescription)"
-                showingAlert = true
             }
+
+            try? await Task.sleep(nanoseconds: 600_000_000)
+            isSaving = false
+            saveProgress = 0
+            saveStatusMessage = ""
+            showingAlert = true
         }
     }
     

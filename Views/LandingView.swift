@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MessageUI
 
 enum ProductSelection {
     case upt, cbMini
@@ -14,6 +15,7 @@ enum ProductSelection {
 struct LandingView: View {
     let onSelect: (ProductSelection) -> Void
     @State private var appeared = false
+    @State private var showingBugReport = false
 
     var body: some View {
         ZStack {
@@ -88,12 +90,26 @@ struct LandingView: View {
                 Spacer()
                 Spacer()
 
-                Text("CFD Build Tracker™ 2026")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-                    .padding(.bottom, 20)
-                    .opacity(appeared ? 1 : 0)
+                VStack(spacing: 8) {
+                    Text("CFD Build Tracker™ 2026")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+
+                    Button {
+                        showingBugReport = true
+                    } label: {
+                        Label("Report a Bug", systemImage: "ladybug")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.bottom, 20)
+                .opacity(appeared ? 1 : 0)
             }
+        }
+        .sheet(isPresented: $showingBugReport) {
+            BugReportView()
         }
         .onAppear {
             withAnimation(.easeOut(duration: 0.45)) {
@@ -158,6 +174,102 @@ private struct ProductCard: View {
                 .onChanged { _ in isPressed = true }
                 .onEnded { _ in isPressed = false }
         )
+    }
+}
+
+// MARK: - Bug Report View
+
+private struct BugReportView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var title = ""
+    @State private var description = ""
+    @State private var showingComposer = false
+    @State private var showMailUnavailableAlert = false
+
+    private let recipientEmail = "lexter.tapawan@pm.me"
+
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("What went wrong?")) {
+                    TextField("Short summary", text: $title)
+                }
+                Section(header: Text("Description")) {
+                    TextEditor(text: $description)
+                        .frame(minHeight: 120)
+                }
+                Section {
+                    Button(action: submitReport) {
+                        Label("Send Bug Report", systemImage: "paperplane.fill")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+            .navigationTitle("Report a Bug")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+            }
+            .sheet(isPresented: $showingComposer) {
+                MailComposerView(
+                    recipient: recipientEmail,
+                    subject: "[Bug] \(title)",
+                    body: description
+                ) {
+                    dismiss()
+                }
+            }
+            .alert("Mail Unavailable", isPresented: $showMailUnavailableAlert) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text("No Mail account is set up on this device. Please email \(recipientEmail) directly.")
+            }
+        }
+    }
+
+    private func submitReport() {
+        if MFMailComposeViewController.canSendMail() {
+            showingComposer = true
+        } else {
+            showMailUnavailableAlert = true
+        }
+    }
+}
+
+// MARK: - Mail Composer UIViewControllerRepresentable
+
+private struct MailComposerView: UIViewControllerRepresentable {
+    let recipient: String
+    let subject: String
+    let body: String
+    let onDismiss: () -> Void
+
+    func makeCoordinator() -> Coordinator { Coordinator(onDismiss: onDismiss) }
+
+    func makeUIViewController(context: Context) -> MFMailComposeViewController {
+        let vc = MFMailComposeViewController()
+        vc.mailComposeDelegate = context.coordinator
+        vc.setToRecipients([recipient])
+        vc.setSubject(subject)
+        vc.setMessageBody(body, isHTML: false)
+        return vc
+    }
+
+    func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {}
+
+    class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
+        let onDismiss: () -> Void
+        init(onDismiss: @escaping () -> Void) { self.onDismiss = onDismiss }
+
+        func mailComposeController(_ controller: MFMailComposeViewController,
+                                   didFinishWith result: MFMailComposeResult,
+                                   error: Error?) {
+            controller.dismiss(animated: true)
+            if result == .sent { onDismiss() }
+        }
     }
 }
 

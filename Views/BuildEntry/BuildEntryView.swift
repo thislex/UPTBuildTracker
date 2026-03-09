@@ -5,7 +5,6 @@
 //  Created by Lexter Tapawan on 10/7/25.
 //
 
-
 import SwiftUI
 
 struct BuildEntryView: View {
@@ -18,9 +17,9 @@ struct BuildEntryView: View {
     @State private var showOrionScanner = false
     @State private var showMPPTScanner = false
     @State private var showShoreChargerScanner = false
-    
+
     @FocusState private var focusedField: FormField?
-    
+
     enum FormField: Hashable {
         case uniqueID
         case bmvSerial, bmvPUK
@@ -29,161 +28,215 @@ struct BuildEntryView: View {
         case shoreChargerSerial
         case builderInitials
     }
-    
+
+    // MARK: - Form Sections
+
+    private var productInfoSection: some View {
+        Section(header: Text("Product Information")) {
+            TextField("UPT ID", text: $viewModel.uniqueID)
+                .keyboardType(.numberPad)
+                .focused($focusedField, equals: .uniqueID)
+        }
+    }
+
+    private var bmvSection: some View {
+        Section(header: Text("Victron BMV")) {
+            SerialNumberField(
+                title: "Serial Number",
+                serialNumber: $viewModel.bmvSerialNumber,
+                onScanTapped: { showBMVScanner = true },
+                focused: $focusedField,
+                focusValue: .bmvSerial
+            )
+            PINTextField(title: "PIN Code", pin: $viewModel.bmvPIN)
+            TextField("PUK", text: $viewModel.bmvPUK)
+                .autocapitalization(.allCharacters)
+                .focused($focusedField, equals: .bmvPUK)
+        }
+    }
+
+    private var orionSection: some View {
+        Section(header: Text("Victron Orion 12/12 50A")) {
+            SerialNumberField(
+                title: "Serial Number",
+                serialNumber: $viewModel.orionSerialNumber,
+                onScanTapped: { showOrionScanner = true },
+                focused: $focusedField,
+                focusValue: .orionSerial
+            )
+            PINTextField(title: "PIN Code", pin: $viewModel.orionPIN)
+            Picker("Charge Rate", selection: $viewModel.orionChargeRate) {
+                Text("18A").tag("18A")
+                Text("50A").tag("50A")
+            }
+            .pickerStyle(.menu)
+        }
+    }
+
+    private var mpptSection: some View {
+        Section(header: Text("Victron MPPT 75/15")) {
+            SerialNumberField(
+                title: "Serial Number",
+                serialNumber: $viewModel.mpptSerialNumber,
+                onScanTapped: { showMPPTScanner = true },
+                focused: $focusedField,
+                focusValue: .mpptSerial
+            )
+            PINTextField(title: "PIN Code", pin: $viewModel.mpptPIN)
+        }
+    }
+
+    private var shoreChargerSection: some View {
+        Section(header: Text("Shore Charger")) {
+            SerialNumberField(
+                title: "Serial Number",
+                serialNumber: $viewModel.shoreChargerSerialNumber,
+                onScanTapped: { showShoreChargerScanner = true },
+                focused: $focusedField,
+                focusValue: .shoreChargerSerial
+            )
+        }
+    }
+
+    private var builderInfoSection: some View {
+        Section(header: Text("Builder Information")) {
+            TextField("Builder Initials", text: $viewModel.builderInitials)
+                .autocapitalization(.allCharacters)
+                .focused($focusedField, equals: .builderInitials)
+            DatePicker("Build Date", selection: $viewModel.buildDate, displayedComponents: .date)
+        }
+    }
+
+    private var actionSection: some View {
+        Section {
+            HStack(spacing: 16) {
+                Button(action: { viewModel.saveBuild(sheetsURL: sheetsURL) }) {
+                    Label("Save Build", systemImage: "checkmark.circle.fill")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color(UIColor.label))
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!viewModel.isFormValid)
+
+                Button(action: viewModel.showClearConfirmation) {
+                    Label("Clear Form", systemImage: "trash.fill")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.bordered)
+                .foregroundStyle(.red)
+            }
+        }
+    }
+
+    // MARK: - Progress Overlay
+
+    @ViewBuilder
+    private var saveProgressOverlay: some View {
+        if viewModel.isSaving {
+            ZStack {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+
+                VStack(spacing: 16) {
+                    Text("Saving Build")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+
+                    ProgressView(value: viewModel.saveProgress)
+                        .progressViewStyle(.linear)
+                        .tint(.accentColor)
+                        .frame(width: 240)
+                        .animation(.easeInOut, value: viewModel.saveProgress)
+
+                    Text(viewModel.saveStatusMessage)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(28)
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .shadow(radius: 20)
+            }
+            .transition(.opacity)
+        }
+    }
+
+    // MARK: - Form View
+
+    private var formView: some View {
+        Form {
+            productInfoSection
+            bmvSection
+            orionSection
+            mpptSection
+            shoreChargerSection
+            builderInfoSection
+            actionSection
+
+            VStack(spacing: 4) {
+                Text("Built by Lexter S. Tapawan")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                Text("CFD Build Tracker™ 2026")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        }
+        .navigationTitle("New UPT Build Entry")
+        .scrollDismissesKeyboard(.interactively)
+        .toolbar {
+            if let goHome = onGoHome {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button { goHome() } label: {
+                        Label("Home", systemImage: "house.fill")
+                    }
+                }
+            }
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { focusedField = nil }
+                    .fontWeight(.semibold)
+            }
+        }
+    }
+
+    // MARK: - Body
+
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Product Information")) {
-                    TextField("UPT ID", text: $viewModel.uniqueID)
-                        .keyboardType(.numberPad)
-                        .focused($focusedField, equals: .uniqueID)
-                }
-                
-                Section(header: Text("Victron BMV")) {
-                    SerialNumberField(
-                        title: "Serial Number",
-                        serialNumber: $viewModel.bmvSerialNumber,
-                        onScanTapped: { showBMVScanner = true },
-                        focused: $focusedField,
-                        focusValue: .bmvSerial
-                    )
-                    
-                    PINTextField(title: "PIN Code", pin: $viewModel.bmvPIN)
-                    
-                    TextField("PUK", text: $viewModel.bmvPUK)
-                        .autocapitalization(.allCharacters)
-                        .focused($focusedField, equals: .bmvPUK)
-                }
-                
-                Section(header: Text("Victron Orion 12/12 50A")) {
-                    SerialNumberField(
-                        title: "Serial Number",
-                        serialNumber: $viewModel.orionSerialNumber,
-                        onScanTapped: { showOrionScanner = true },
-                        focused: $focusedField,
-                        focusValue: .orionSerial
-                    )
-                    
-                    PINTextField(title: "PIN Code", pin: $viewModel.orionPIN)
-                    
-                    Picker("Charge Rate", selection: $viewModel.orionChargeRate) {
-                        Text("18A").tag("18A")
-                        Text("50A").tag("50A")
-                    }
-                    .pickerStyle(.menu)
-                }
-                
-                Section(header: Text("Victron MPPT 75/15")) {
-                    SerialNumberField(
-                        title: "Serial Number",
-                        serialNumber: $viewModel.mpptSerialNumber,
-                        onScanTapped: { showMPPTScanner = true },
-                        focused: $focusedField,
-                        focusValue: .mpptSerial
-                    )
-                    
-                    PINTextField(title: "PIN Code", pin: $viewModel.mpptPIN)
-                }
-                
-                Section(header: Text("Shore Charger")) {
-                    SerialNumberField(
-                        title: "Serial Number",
-                        serialNumber: $viewModel.shoreChargerSerialNumber,
-                        onScanTapped: { showShoreChargerScanner = true },
-                        focused: $focusedField,
-                        focusValue: .shoreChargerSerial
-                    )
-                }
-                
-                Section(header: Text("Builder Information")) {
-                    TextField("Builder Initials", text: $viewModel.builderInitials)
-                        .autocapitalization(.allCharacters)
-                        .focused($focusedField, equals: .builderInitials)
-                    DatePicker("Build Date", selection: $viewModel.buildDate, displayedComponents: .date)
-                }
-                
-                Section {
-                    HStack(spacing: 16) {
-                        Button(action: { viewModel.saveBuild(sheetsURL: sheetsURL) }) {
-                            Label("Save Build", systemImage: "checkmark.circle.fill")
-                                .frame(maxWidth: .infinity, minHeight: 44)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(Color(UIColor.label))
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(!viewModel.isFormValid)
-                        
-                        Button(action: viewModel.showClearConfirmation) {
-                            Label("Clear Form", systemImage: "trash.fill")
-                                .frame(maxWidth: .infinity, minHeight: 44)
-                        }
-                        .buttonStyle(.bordered)
-                        .foregroundStyle(.red)
-                    }
-                }
-
-                
-                VStack(spacing: 4) {
-                    Text("Built by Lexter S. Tapawan")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                    
-                    Text("CFD Build Tracker™ 2026")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
+            ZStack {
+                formView
+                saveProgressOverlay
             }
-            .navigationTitle("New Build Entry")
-            .scrollDismissesKeyboard(.interactively) // Dismiss keyboard on scroll
-            // MARK: - Navigation + Keyboard Toolbar
-            .toolbar {
-                if let goHome = onGoHome {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            goHome()
-                        } label: {
-                            Label("Home", systemImage: "house.fill")
-                        }
-                    }
-                }
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("Done") {
-                        focusedField = nil // Dismisses keyboard
-                    }
-                    .fontWeight(.semibold)
-                }
-            }
-            // MARK: - Scanner Sheets
-            .sheet(isPresented: $showBMVScanner) {
-                SimpleBarcodeScanner(scannedCode: $viewModel.bmvSerialNumber)
-            }
-            .sheet(isPresented: $showOrionScanner) {
-                SimpleBarcodeScanner(scannedCode: $viewModel.orionSerialNumber)
-            }
-            .sheet(isPresented: $showMPPTScanner) {
-                SimpleBarcodeScanner(scannedCode: $viewModel.mpptSerialNumber)
-            }
-            .sheet(isPresented: $showShoreChargerScanner) {
-                SimpleBarcodeScanner(scannedCode: $viewModel.shoreChargerSerialNumber)
-            }
-            .alert("Build Entry", isPresented: $viewModel.showingAlert) {
-                Button("OK", role: .cancel) { }
-            } message: {
-                Text(viewModel.alertMessage)
-            }
-            .alert("Clear Form", isPresented: $viewModel.showingClearConfirmation) {
-                Button("Yes", role: .destructive) {
-                    viewModel.clearForm()
-                }
-                Button("No", role: .cancel) { }
-            } message: {
-                Text("Are you sure you want to clear all form data? This action cannot be undone.")
-            }
+            .animation(.easeInOut(duration: 0.25), value: viewModel.isSaving)
+        }
+        .sheet(isPresented: $showBMVScanner) {
+            SimpleBarcodeScanner(scannedCode: $viewModel.bmvSerialNumber)
+        }
+        .sheet(isPresented: $showOrionScanner) {
+            SimpleBarcodeScanner(scannedCode: $viewModel.orionSerialNumber)
+        }
+        .sheet(isPresented: $showMPPTScanner) {
+            SimpleBarcodeScanner(scannedCode: $viewModel.mpptSerialNumber)
+        }
+        .sheet(isPresented: $showShoreChargerScanner) {
+            SimpleBarcodeScanner(scannedCode: $viewModel.shoreChargerSerialNumber)
+        }
+        .alert("Build Entry", isPresented: $viewModel.showingAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.alertMessage)
+        }
+        .alert("Clear Form", isPresented: $viewModel.showingClearConfirmation) {
+            Button("Yes", role: .destructive) { viewModel.clearForm() }
+            Button("No", role: .cancel) { }
+        } message: {
+            Text("Are you sure you want to clear all form data? This action cannot be undone.")
         }
     }
 }
@@ -191,33 +244,27 @@ struct BuildEntryView: View {
 // MARK: - Number Row Accessory
 struct NumberRowAccessory: View {
     let onDone: () -> Void
-    
+
+    private func insertNumber(_ number: String) {
+        guard let keyWindow = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow }),
+              let textField = keyWindow.firstResponder as? UITextField else { return }
+        textField.insertText(number)
+    }
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
                 ForEach(["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"], id: \.self) { number in
-                    Button(number) {
-                        // Insert the number at cursor position
-                        guard let keyWindow = UIApplication.shared.connectedScenes
-                            .compactMap({ $0 as? UIWindowScene })
-                            .flatMap({ $0.windows })
-                            .first(where: { $0.isKeyWindow }),
-                              let textField = keyWindow.firstResponder as? UITextField else {
-                            return
-                        }
-                        textField.insertText(number)
-                    }
-                    .buttonStyle(.bordered)
-                    .buttonBorderShape(.roundedRectangle(radius: 8))
+                    Button(number) { insertNumber(number) }
+                        .buttonStyle(.bordered)
+                        .buttonBorderShape(.roundedRectangle(radius: 8))
                 }
-                
                 Spacer()
-                
-                Button {
-                    onDone()
-                } label: {
-                    Text("Done")
-                        .fontWeight(.semibold)
+                Button { onDone() } label: {
+                    Text("Done").fontWeight(.semibold)
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.roundedRectangle(radius: 8))
@@ -242,7 +289,7 @@ extension UIResponder {
         UIApplication.shared.sendAction(#selector(UIResponder.findFirstResponder(_:_:)), to: nil, from: (block as Any, UnsafeMutablePointer<ObjCBool>.allocate(capacity: 1)), for: nil)
         return responder
     }
-    
+
     @objc private func findFirstResponder(_ sender: Any, _ stop: UnsafeMutablePointer<ObjCBool>) {
         if self.isFirstResponder {
             (sender as? (Any?, UnsafeMutablePointer<ObjCBool>) -> Void)?(self, stop)
@@ -254,7 +301,7 @@ extension UIWindow {
     var firstResponder: UIResponder? {
         findFirstResponder(in: self)
     }
-    
+
     private func findFirstResponder(in view: UIView) -> UIResponder? {
         if view.isFirstResponder {
             return view
