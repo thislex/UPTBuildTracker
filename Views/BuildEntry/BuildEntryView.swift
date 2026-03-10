@@ -110,7 +110,10 @@ struct BuildEntryView: View {
     private var actionSection: some View {
         Section {
             HStack(spacing: 16) {
-                Button(action: { viewModel.saveBuild(sheetsURL: sheetsURL) }) {
+                Button(action: {
+                    focusedField = nil
+                    viewModel.saveBuild(sheetsURL: sheetsURL)
+                }) {
                     Label("Save Build", systemImage: "checkmark.circle.fill")
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .fontWeight(.semibold)
@@ -153,6 +156,7 @@ struct BuildEntryView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
                 .padding(28)
                 .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
@@ -231,6 +235,7 @@ struct BuildEntryView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(viewModel.alertMessage)
+                .multilineTextAlignment(.center)
         }
         .alert("Clear Form", isPresented: $viewModel.showingClearConfirmation) {
             Button("Yes", role: .destructive) { viewModel.clearForm() }
@@ -238,80 +243,6 @@ struct BuildEntryView: View {
         } message: {
             Text("Are you sure you want to clear all form data? This action cannot be undone.")
         }
-    }
-}
-
-// MARK: - Number Row Accessory
-struct NumberRowAccessory: View {
-    let onDone: () -> Void
-
-    private func insertNumber(_ number: String) {
-        guard let keyWindow = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .flatMap({ $0.windows })
-            .first(where: { $0.isKeyWindow }),
-              let textField = keyWindow.firstResponder as? UITextField else { return }
-        textField.insertText(number)
-    }
-
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 6) {
-                ForEach(["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"], id: \.self) { number in
-                    Button(number) { insertNumber(number) }
-                        .buttonStyle(.bordered)
-                        .buttonBorderShape(.roundedRectangle(radius: 8))
-                }
-                Spacer()
-                Button { onDone() } label: {
-                    Text("Done").fontWeight(.semibold)
-                }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.roundedRectangle(radius: 8))
-            }
-            .padding(.horizontal, 8)
-        }
-        .frame(height: 44)
-        .background(.bar)
-    }
-}
-
-// Helper extension to find first responder
-extension UIResponder {
-    static var firstResponder: UIResponder? {
-        var responder: UIResponder?
-        let block: (Any?, UnsafeMutablePointer<ObjCBool>) -> Void = { obj, stop in
-            if let obj = obj as? UIResponder, obj.isFirstResponder {
-                responder = obj
-                stop.pointee = true
-            }
-        }
-        UIApplication.shared.sendAction(#selector(UIResponder.findFirstResponder(_:_:)), to: nil, from: (block as Any, UnsafeMutablePointer<ObjCBool>.allocate(capacity: 1)), for: nil)
-        return responder
-    }
-
-    @objc private func findFirstResponder(_ sender: Any, _ stop: UnsafeMutablePointer<ObjCBool>) {
-        if self.isFirstResponder {
-            (sender as? (Any?, UnsafeMutablePointer<ObjCBool>) -> Void)?(self, stop)
-        }
-    }
-}
-
-extension UIWindow {
-    var firstResponder: UIResponder? {
-        findFirstResponder(in: self)
-    }
-
-    private func findFirstResponder(in view: UIView) -> UIResponder? {
-        if view.isFirstResponder {
-            return view
-        }
-        for subview in view.subviews {
-            if let responder = findFirstResponder(in: subview) {
-                return responder
-            }
-        }
-        return nil
     }
 }
 

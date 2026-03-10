@@ -30,11 +30,7 @@ class BuildEntryViewModel: ObservableObject {
     var bmvPINIsValid: Bool { bmvPIN.count == 6 }
     var orionPINIsValid: Bool { orionPIN.count == 6 }
     var mpptPINIsValid: Bool { mpptPIN.count == 6 }
-    
 
-
-    @Published var showingScanner = false
-    @Published var scanningField: ScanField = .bmv
     @Published var showingAlert = false
     @Published var alertMessage = ""
     @Published var showingClearConfirmation = false
@@ -67,11 +63,6 @@ class BuildEntryViewModel: ObservableObject {
         uniqueID = "BUILD-\(dateString)-\(random)"
     }
     
-    func scanSerial(for field: ScanField) {
-        scanningField = field
-        showingScanner = true
-    }
-    
     func saveBuild(sheetsURL: String) {
         let record = buildRecord()
 
@@ -96,20 +87,20 @@ class BuildEntryViewModel: ObservableObject {
                         }
                         saveProgress = 1.0
                         saveStatusMessage = "Done!"
-                        alertMessage = "Build saved successfully!\nID: \(uniqueID)\n✅ Uploaded to Google Sheets"
+                        alertMessage = "Build saved successfully!\nUPT ID: \(uniqueID)\n✅ Uploaded to Google Sheets"
                     } catch {
                         if let entity = fetchBuildEntity(by: record.id) {
                             try? await dataService.updateSyncStatus(entity, status: "failed", error: error.localizedDescription)
                         }
                         saveProgress = 1.0
                         saveStatusMessage = "Saved locally (upload failed)"
-                        alertMessage = "Build saved locally!\nID: \(uniqueID)\n⚠️ Upload failed: \(error.localizedDescription)\n\nYou can retry from the Archive."
+                        alertMessage = "Build saved locally!\nUPT ID: \(uniqueID)\n⚠️ Upload failed: \(error.localizedDescription)\n\nYou can retry from the Archive."
                     }
                 } else {
                     try await dataService.saveBuild(record, syncStatus: "pending")
                     saveProgress = 1.0
                     saveStatusMessage = "Saved locally!"
-                    alertMessage = "Build saved locally!\nID: \(uniqueID)\n⚠️ No Google Sheets URL configured. You can retry sync from the Archive."
+                    alertMessage = "Build saved locally!\nUPT ID: \(uniqueID)\n⚠️ No Google Sheets URL configured. You can retry sync from the Archive."
                 }
 
                 clearForm()
@@ -176,30 +167,4 @@ class BuildEntryViewModel: ObservableObject {
     func showClearConfirmation() {
         showingClearConfirmation = true
     }
-    
-    func getBindingForScanField() -> Binding<String> {
-        switch scanningField {
-        case .bmv:
-            return Binding(
-                get: { self.bmvSerialNumber },
-                set: { self.bmvSerialNumber = $0 }
-            )
-        case .orion:
-            return Binding(
-                get: { self.orionSerialNumber },
-                set: { self.orionSerialNumber = $0 }
-            )
-        case .mppt:
-            return Binding(
-                get: { self.mpptSerialNumber },
-                set: { self.mpptSerialNumber = $0 }
-            )
-        case .shoreCharger:
-            return Binding(
-                get: { self.shoreChargerSerialNumber },
-                set: { self.shoreChargerSerialNumber = $0 }
-            )
-        }
-    }
 }
-
